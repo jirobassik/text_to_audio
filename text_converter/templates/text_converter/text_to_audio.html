@@ -1,0 +1,20 @@
+{% extends 'layout_audio.html' %}
+
+{% block content_main %}
+
+    <form method="POST">
+        {% csrf_token %}
+        <label for="text-input">Введите текст:</label>
+        <textarea id="text-input" name="text" rows="4" cols="50"></textarea>
+
+        <label for="voice-select">Выберите голос:</label>
+        <select id="voice-select" name="voice">
+            {% for vote in votes %}
+                <option value="{{ vote.id }}">{{ vote.audio_name }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Сгенерировать аудио</button>
+    </form>
+
+{% endblock %}

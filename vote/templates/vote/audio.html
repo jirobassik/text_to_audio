@@ -1,0 +1,41 @@
+{% extends 'layout_audio.html' %}
+{% load static %}
+{% block style %}{% static 'vote/css/card.css' %}{% endblock %}
+
+{% block content_main %}
+    <h1>Список голосов</h1>
+
+    {% for audio in audio_files %}
+        <div class="audio-card" id="{{ audio.id }}">
+            <h2>{{ audio.audio_name }}</h2>
+            <audio id="audio-player-{{ forloop.counter }}" controls>
+                <source src="{{ audio.audio_file.url }}" type="audio/mpeg">
+            </audio>
+        </div>
+    {% endfor %}
+
+    <script>
+        function playAudio(audioId) {
+            var audioPlayer = document.getElementById("audio-player-" + audioId);
+            if (audioPlayer) {
+                audioPlayer.play();
+            }
+        }
+
+        function pauseAudio(audioId) {
+            var audioPlayer = document.getElementById("audio-player-" + audioId);
+            if (audioPlayer) {
+                audioPlayer.pause();
+            }
+        }
+
+        function seekAudio(audioId, time) {
+            var audioPlayer = document.getElementById("audio-player-" + audioId);
+            if (audioPlayer) {
+                audioPlayer.currentTime = time;
+            }
+        }
+
+    </script>
+
+{% endblock %}
