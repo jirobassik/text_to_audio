@@ -1,28 +1,27 @@
 import vanna as vn
 from operator import getitem
-vn.set_api_key('bd170b4f8e3842cc93b4522ccadf43ce')
-vn.set_model('audio')
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'text_to_audio',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
-vn.connect_to_postgres('localhost', 'text_to_audio', 'postgres', 'postgres', '5432')
-# sql_schema = '''SELECT * FROM information_schema.columns'''
-#
-# df_information_schema = vn.run_sql(sql_schema)
-# print(df_information_schema)
-# plan = vn.get_training_plan_generic(df_information_schema)
-# print(plan)
-# vn.train(plan=plan)
+from typing import NoReturn
 
-d = vn.ask("sort by time in table history_historymodel", auto_train=True, print_results=False)
-print(getitem(d, 0))
-# vn.set_model('chinook')
-# vn.ask('Print date in table history_historymodel')
-# print(vn.get_training_data())
+
+class VannaUse:
+    vn.set_api_key('bd170b4f8e3842cc93b4522ccadf43ce')
+    vn.set_model('audio')
+    vn.connect_to_postgres('localhost', 'text_to_audio', 'postgres', 'postgres', '5432')
+
+    @staticmethod
+    def train_vanna(sql_schema='''SELECT * FROM information_schema.columns''') -> NoReturn:
+        df_information_schema = vn.run_sql(sql_schema)
+        print(df_information_schema)
+        plan = vn.get_training_plan_generic(df_information_schema)
+        print(plan)
+        vn.train(plan=plan)
+
+    @staticmethod
+    def text_to_sql(question: str):
+        answer = vn.ask(question, auto_train=True, print_results=False)
+        sql_answer = getitem(answer, 0)
+        print(sql_answer)
+        return sql_answer
+
+# vanna_use = VannaUse()
+# print(vanna_use.text_to_sql('Print use_vote and text in table history_historymodel'))

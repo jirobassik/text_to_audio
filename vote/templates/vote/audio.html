@@ -11,6 +11,13 @@
             <audio id="audio-player-{{ forloop.counter }}" controls>
                 <source src="{{ audio.audio_file.url }}" type="audio/mpeg">
             </audio>
+            <h4>Тэги:</h4>
+            <h5>
+                {% for tag in audio.tags.all %}
+                    <a href="{% url 'vote-tag-view' tag.slug %}">{{ tag.name }}</a>
+                    {% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </h5>
         </div>
     {% endfor %}
 

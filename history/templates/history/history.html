@@ -1,15 +1,22 @@
 {% extends 'layout_audio.html' %}
 {% load static %}
+{% load custom_tag %}
 
 {% block content_main %}
     <h1>История</h1>
+    <form action="{% url 'history-search' %}" method="get">
+        <label>
+            <input name="input_query" type="text" placeholder="Введите запрос">
+            <button>Search</button>
+        </label>
+    </form>
     <table>
         <thead>
         <tr>
-            <th>Текст</th>
-            <th>Аудиофайл</th>
-            <th>Используемый голос</th>
-            <th>Время добавления</th>
+            <th>Озвученный текст (text)</th>
+            <th>Результат озвучивания (audio_file)</th>
+            <th>Используемый голос (use_vote)</th>
+            <th>Время добавления (time_add)</th>
         </tr>
         </thead>
         <tbody>
