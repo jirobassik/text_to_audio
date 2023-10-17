@@ -11,7 +11,6 @@ class VoteAdmin(admin.ModelAdmin):
     search_fields = ['audio_name']
     ordering = ['audio_name']
 
-    # TODO Не удаляется связанное поле, точнее файл
     def delete_queryset(self, request, queryset):
         paths = queryset.values_list('audio_file', flat=True)
         for file_path in paths:

@@ -1,18 +1,7 @@
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponse
 from django.views.generic import ListView
 from taggit.models import Tag
 from .models import VoteModel
-
-
-def play_audio(request, audio_id):
-    audio = get_object_or_404(VoteModel, id=audio_id)
-    audio_file = audio.audio_file.path
-
-    with open(audio_file, 'rb') as file:
-        response = HttpResponse(file.read(), content_type='audio/mpeg')
-        response['Content-Disposition'] = 'inline; filename=' + audio.audio_file.name
-        return response
 
 
 # TODO можно добавить часто используемые голоса
