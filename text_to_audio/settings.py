@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'vote',
     'text_converter',
     'history',
+    'user_profile',
 ]
 
 MIDDLEWARE = [
@@ -119,6 +120,13 @@ DATETIME_FORMAT = 'd/m/Y, H:i'
 USE_I18N = True
 
 USE_TZ = False
+
+
+LOGIN_REDIRECT_URL = 'text-to-audio'
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' # TODO надо будет изменить на настоящую почту
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/

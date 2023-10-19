@@ -1,18 +1,19 @@
 from django.views.generic import ListView
 from django.contrib.postgres.search import SearchVector
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import HistoryModel
 from utils.vanna_test import VannaUse
 from operator import concat
 
 vanna_ = VannaUse
 
-class HistoryView(ListView):
+class HistoryView(LoginRequiredMixin, ListView):
     model = HistoryModel
     context_object_name = 'history_entries'
     template_name = 'history/history.html'
 
 
-class HistoryAiSearchView(ListView):
+class HistoryAiSearchView(LoginRequiredMixin, ListView):
     model = HistoryModel
     template_name = 'history/history_ai_search.html'
     context_object_name = 'history_ai_entries'
@@ -29,7 +30,7 @@ class HistoryAiSearchView(ListView):
         query_set = self.model.objects.raw(vanna_raw_query)
         return query_set
 
-class HistorySearchView(ListView):
+class HistorySearchView(LoginRequiredMixin, ListView):
     model = HistoryModel
     context_object_name = 'history_entries'
     template_name = 'history/history.html'

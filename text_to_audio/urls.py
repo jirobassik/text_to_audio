@@ -23,5 +23,6 @@ urlpatterns = [
                   path('admin/', admin.site.urls),
                   path('votes/', include('vote.urls'), name='votes'),  # TODO В книге не так
                   path('history/', include('history.urls'), name='history'),
+                  path('account/', include('user_profile.urls'), name='account'),
                   path('', include('text_converter.urls')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
