@@ -1,0 +1,53 @@
+{% extends 'layout_audio.html' %}
+{% load static %}
+{% block style %}{% static 'vote/css/card.css' %}{% endblock %}
+
+{% block content_main %}
+    {% if user_vote %}
+        <h1>Пользовательские голосов</h1>
+        {% for audio in user_vote %}
+            <div class="audio-card" id="{{ audio.id }}">
+                <h2>{{ audio.audio_name }}</h2>
+                <audio id="audio-player-{{ forloop.counter }}" controls>
+                    <source src="{{ audio.user_audio_file.url }}" type="audio/mpeg">
+                </audio>
+                <h4>Тэги:</h4>
+                <h5>
+                    {% for tag in audio.tags.all %}
+                        <a href="{% url 'vote-tag-view-user' tag.slug %}">{{ tag.name }}</a>
+                        {% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </h5>
+            </div>
+        {% endfor %}
+        <a href="{% url 'vote-create-user' %}">Добавить свой голос</a>
+    {% else %}
+        <p>Вы ещё не добавили свой голос, вы можете сделать это нажав <a href="{% url 'vote-create-user' %}">добавить свой
+            голос</a></p>
+    {% endif %}
+
+    <script>
+        function playAudio(audioId) {
+            var audioPlayer = document.getElementById("audio-player-" + audioId);
+            if (audioPlayer) {
+                audioPlayer.play();
+            }
+        }
+
+        function pauseAudio(audioId) {
+            var audioPlayer = document.getElementById("audio-player-" + audioId);
+            if (audioPlayer) {
+                audioPlayer.pause();
+            }
+        }
+
+        function seekAudio(audioId, time) {
+            var audioPlayer = document.getElementById("audio-player-" + audioId);
+            if (audioPlayer) {
+                audioPlayer.currentTime = time;
+            }
+        }
+
+    </script>
+
+{% endblock %}

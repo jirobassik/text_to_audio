@@ -1,0 +1,9 @@
+{% extends "layout_audio.html" %}
+{% block content_main %}
+    <h1>Добавление нового голоса</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p><input type="submit" value="Добавить голос"></p>
+    </form>
+{% endblock %}

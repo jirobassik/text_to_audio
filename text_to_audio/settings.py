@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'text_converter',
     'history',
     'user_profile',
+    'user_vote',
 ]
 
 MIDDLEWARE = [
