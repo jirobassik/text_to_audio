@@ -12,9 +12,10 @@ class AudioView(ListView):
 
 
 class TagAudioView(ListView):
+    model = VoteModel
     template_name = 'vote/audio.html'
     context_object_name = 'audio_files'
 
     def get_queryset(self):
         tag = get_object_or_404(Tag, slug=self.kwargs['tag'])
-        return VoteModel.objects.filter(tags__in=[tag])
+        return self.model.objects.filter(tags__in=[tag])

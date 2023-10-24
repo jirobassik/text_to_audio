@@ -54,6 +54,16 @@
             </div>
         </div>
     </nav>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li class="{{ message.tags }}">
+                    {{ message|safe }}
+                    <a href="{% url 'history-view' %}" class="close">x</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 </header>
 
 <main>

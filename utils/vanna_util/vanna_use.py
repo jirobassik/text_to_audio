@@ -4,9 +4,10 @@ from typing import NoReturn
 
 
 class VannaUse:
-    vn.set_api_key('bd170b4f8e3842cc93b4522ccadf43ce')
-    vn.set_model('audio')
-    vn.connect_to_postgres('localhost', 'text_to_audio', 'postgres', 'postgres', '5432')
+    def __init__(self):
+        vn.set_api_key('bd170b4f8e3842cc93b4522ccadf43ce')
+        vn.set_model('audio')
+        vn.connect_to_postgres('localhost', 'text_to_audio', 'postgres', 'postgres', '5432')
 
     @staticmethod
     def train_vanna(sql_schema='''SELECT * FROM information_schema.columns''') -> NoReturn:

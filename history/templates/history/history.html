@@ -2,6 +2,8 @@
 {% load static %}
 {% load custom_tag %}
 
+{% block style %}{% static 'history/css/messages.css' %}{% endblock %}
+
 {% block content_main %}
     <h1>История</h1>
     {#    <form action="{% url 'history-search' %}" method="get">#}

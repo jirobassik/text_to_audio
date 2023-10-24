@@ -2,10 +2,9 @@ from django.views.generic import ListView
 from django.contrib.postgres.search import SearchVector
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import HistoryModel
-from utils.vanna_test import VannaUse
+from utils.vanna_util.vanna_run import vanna_get_queryset
 from operator import concat
 
-vanna_ = VannaUse
 
 class HistoryView(LoginRequiredMixin, ListView):
     model = HistoryModel
@@ -20,15 +19,8 @@ class HistoryAiSearchView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         query = concat(self.request.GET.get('input_query', ''), ' in history_historymodel')  # TODO Может по другому?
+        return vanna_get_queryset(self, query)
 
-        def add_id(query_string: str) -> str:
-            split_str = query_string.split(" ")
-            split_str.insert(1, 'id,')
-            return " ".join(split_str)
-
-        vanna_raw_query = add_id(vanna_.text_to_sql(query))
-        query_set = self.model.objects.raw(vanna_raw_query)
-        return query_set
 
 class HistorySearchView(LoginRequiredMixin, ListView):
     model = HistoryModel
@@ -40,4 +32,3 @@ class HistorySearchView(LoginRequiredMixin, ListView):
         filter_query = self.model.objects.annotate(
             search=SearchVector('text', 'use_vote__audio_name')).filter(search=query)
         return filter_query
-

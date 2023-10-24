@@ -1,8 +1,7 @@
-from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from user_vote.models import UserVoteModel
-from taggit.models import Tag
+from vote.views import TagAudioView
 
 
 class UserVoteView(LoginRequiredMixin, ListView):
@@ -13,15 +12,11 @@ class UserVoteView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return self.model.objects.filter(user_vote=self.request.user)
 
-# TODO можно наследоваться?
-class UserVoteTagView(LoginRequiredMixin, ListView):
+
+class UserVoteTagView(LoginRequiredMixin, TagAudioView):
     model = UserVoteModel
     template_name = 'user_vote/user_votes.html'
     context_object_name = 'user_vote'
-
-    def get_queryset(self):
-        tag = get_object_or_404(Tag, slug=self.kwargs['tag'])
-        return self.model.objects.filter(tags__in=[tag])
 
 
 class CreateVoteView(LoginRequiredMixin, CreateView):
