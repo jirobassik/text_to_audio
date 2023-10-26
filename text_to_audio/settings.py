@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'history',
     'user_profile',
     'user_vote',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

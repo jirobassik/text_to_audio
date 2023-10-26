@@ -8,9 +8,10 @@
         {% for audio in user_vote %}
             <div class="audio-card" id="{{ audio.id }}">
                 <h2>{{ audio.audio_name }}</h2>
-                <audio id="audio-player-{{ forloop.counter }}" controls>
-                    <source src="{{ audio.user_audio_file.url }}" type="audio/mpeg">
-                </audio>
+{#                <audio id="audio-player-{{ forloop.counter }}" controls>#}
+{#                    <source src="{{ audio.user_audio_file.url }}" type="audio/mpeg">#}
+{#                </audio>#}
+                <a href="{{ audio.get_absolute_url }}">Аудио</a>
                 <h4>Тэги:</h4>
                 <h5>
                     {% for tag in audio.tags.all %}

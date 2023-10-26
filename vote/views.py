@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from taggit.models import Tag
 from .models import VoteModel
 
@@ -19,3 +19,9 @@ class TagAudioView(ListView):
     def get_queryset(self):
         tag = get_object_or_404(Tag, slug=self.kwargs['tag'])
         return self.model.objects.filter(tags__in=[tag])
+
+
+class DetailAudioView(DetailView):
+    model = VoteModel
+    template_name = 'vote/vote_detail.html'
+    context_object_name = 'audio_files_detail'

@@ -6,7 +6,7 @@ from typing import NoReturn
 class VannaUse:
     def __init__(self):
         vn.set_api_key('bd170b4f8e3842cc93b4522ccadf43ce')
-        vn.set_model('audio')
+        vn.set_model('audio_2')
         vn.connect_to_postgres('localhost', 'text_to_audio', 'postgres', 'postgres', '5432')
 
     @staticmethod
@@ -25,4 +25,9 @@ class VannaUse:
         return sql_answer
 
 # vanna_use = VannaUse()
-# print(vanna_use.text_to_sql('Print use_vote and text in table history_historymodel'))
+# sql_ = '''SELECT * FROM INFORMATION_SCHEMA.COLUMNS
+# WHERE table_name NOT IN ('auth_group', 'auth_group_permissions', 'auth_permission', 'auth_user', 'auth_user_groups',
+# 'auth_user_user_permissions', 'django_admin_log', 'django_content_type', 'django_migrations', 'django_session',
+# 'taggit_tag', 'taggit_taggeditem', 'user_vote_uservotemodel', 'vote_votemodel') AND table_schema = 'public'; '''
+# vanna_use.train_vanna(sql_)
+# print(vanna_use.text_to_sql('Print text, audio_file and sort by time_add'))

@@ -1,0 +1,12 @@
+{% extends 'layout_audio.html' %}
+{% load static %}
+{% block content_main %}
+    {{ audio_files_detail.audio_name }}
+    {% for tag in audio_files_detail.tags.all %}
+        {{ tag.name }}
+        {% if not forloop.last %}, {% endif %}
+    {% endfor %}
+    <audio controls>
+        <source src="{{ audio_files_detail.audio_file.url }}" type="audio/mpeg">
+    </audio>
+{% endblock %}

@@ -29,4 +29,4 @@ class VoteModel(CommonVoteModel):
         super().delete()
 
     def get_absolute_url(self):
-        return reverse('vote-view')
+        return reverse('vote-detail-view', args=[self.id])

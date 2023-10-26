@@ -14,7 +14,15 @@
             {% endfor %}
         </select>
 
-        <button type="submit">Сгенерировать аудио</button>
+        <label for="preset-select">Выберите качество:</label>
+        <select id="preset-select" name="preset">
+            <option value="ultra_fast">Ultra fast</option>
+            <option value="fast">Fast</option>
+            <option value="quality">Quality</option>
+            <option value="high_quality">High quality</option>
+        </select>
+
+        <button type="submit" name="converter">Сгенерировать аудио</button>
     </form>
 
 {% endblock %}

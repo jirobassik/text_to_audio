@@ -3,6 +3,7 @@ import pathlib
 from django.db import models
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
+from django.urls import reverse
 
 from vote.models import VoteModel
 
@@ -25,6 +26,9 @@ class HistoryModel(models.Model):
     def delete(self, using=None, keep_parents=False):
         pathlib.Path('media', self.audio_file.name).unlink(missing_ok=False)
         super().delete()
+
+    def get_absolute_url(self):
+        return reverse('history-detail', args=[self.id])
 
     def __str__(self):
         return self.text

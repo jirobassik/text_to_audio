@@ -1,0 +1,10 @@
+{% extends 'layout_audio.html' %}
+{% load static %}
+{% block content_main %}
+    {{ history_detail_entry.text }}
+    {{ history_detail_entry.time_add }}
+    {{ history_detail_entry.use_vote }}
+    <audio controls>
+        <source src="{{ history_detail_entry.audio_file.url }}" type="audio/mpeg">
+    </audio>
+{% endblock %}
