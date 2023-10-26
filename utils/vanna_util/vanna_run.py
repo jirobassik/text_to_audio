@@ -13,11 +13,11 @@ def vanna_get_queryset(self, query):
     try:
         vanna_ = VannaUse()
         vanna_raw_query = add_id(vanna_.text_to_sql(query))
-        query_set = self.model.objects.raw(vanna_raw_query)
+        query_set = self.model.objects.history_user_access(self.request.user).raw(vanna_raw_query)
         return query_set
     except ConnectionError:
         self.template_name = 'history/history.html'
         self.context_object_name = 'history_entries'
-        query_set = self.model.objects.all()
+        query_set = self.model.objects.history_user_access(self.request.user)
         messages.error(self.request, 'Интеллектуальный поиск временно не работает')
         return query_set

@@ -24,5 +24,8 @@
 
         <button type="submit" name="converter">Сгенерировать аудио</button>
     </form>
+    {% if voice %}
+        {{ voice }}
+    {% endif %}
 
 {% endblock %}

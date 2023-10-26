@@ -12,11 +12,18 @@ class HistoryView(LoginRequiredMixin, ListView):
     context_object_name = 'history_entries'
     template_name = 'history/history.html'
 
+    def get_queryset(self):
+        return self.model.objects.history_user_access(self.request.user)
+
 
 class HistoryDetailView(LoginRequiredMixin, DetailView):
     model = HistoryModel
     context_object_name = 'history_detail_entry'
     template_name = 'history/history_detail.html'
+
+    def get_object(self, queryset=None):
+        queryset = self.model.objects.history_user_access(self.request.user)
+        return super().get_object(queryset)
 
 
 def play_audio(request, audio_id):
@@ -46,6 +53,6 @@ class HistorySearchView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         query = self.request.GET.get('input_query', '')
-        filter_query = self.model.objects.annotate(
+        filter_query = self.model.objects.history_user_access(self.request.user).annotate(
             search=SearchVector('text', 'use_vote__audio_name')).filter(search=query)
         return filter_query
