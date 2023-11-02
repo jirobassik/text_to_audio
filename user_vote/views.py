@@ -1,7 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
-from django.views.generic import ListView, CreateView, DetailView
+from django.views.generic import ListView, CreateView, DetailView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from taggit.models import Tag
 from overrides import override
@@ -92,11 +92,20 @@ class CreateVoteView(LoginRequiredMixin, CreateView):
         )
 
     @override(check_signature=False)
-    def form_valid(self, form, form_file):
+    def form_valid(self, form, form_file):  # TODO добавить проверку что поле файла не пустое
         form.instance.user_vote = self.request.user
-        self.object = form.save(commit=False)
-        self.object.save()
+        self.object = form.save()  # TODO Разобраться с save
         files = form_file.cleaned_data[0].get('audio_file')
         for file in files:
             UserAudioFile.objects.create(user_voice_name=self.object, audio_file=file)
         return HttpResponseRedirect(self.success_url)
+
+
+class UserVoteDeleteView(LoginRequiredMixin, DeleteView):
+    model = UserVoteModel
+    success_url = reverse_lazy("vote-view-user")
+    template_name = 'user_vote/user_vote_confirm_delete.html'
+
+    def get_object(self, queryset=None):
+        queryset = self.model.objects.access_user(self.request.user)
+        return super().get_object(queryset)

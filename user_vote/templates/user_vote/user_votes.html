@@ -19,6 +19,7 @@
                         {% if not forloop.last %}, {% endif %}
                     {% endfor %}
                 </h5>
+                <a href="{% url 'vote-delete-user' audio.id %}">Удалить голос</a>
             </div>
         {% endfor %}
         <a href="{% url 'vote-create-user' %}">Добавить свой голос</a>
