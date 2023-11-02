@@ -6,7 +6,10 @@
         {{ tag.name }}
         {% if not forloop.last %}, {% endif %}
     {% endfor %}
-    <audio controls>
-        <source src="{{ user_vote_detail.user_audio_file.url }}" type="audio/mpeg">
-    </audio>
+    <h3>Аудио для голоса</h3>
+    {% for audio in user_vote_detail.useraudiofile_set.all %}
+        <audio controls>
+            <source src="{{ audio.audio_file.url }}" type="audio/mpeg">
+        </audio>
+    {% endfor %}
 {% endblock %}

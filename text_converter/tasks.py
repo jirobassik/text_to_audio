@@ -8,12 +8,12 @@ from vote.models import VoteModel
 from time import sleep
 
 
-@task()
-def response_converter():
-    sleep(10)
-    response = 'Аудио файл'
-    # new_view(response)
-    new_view2(response)
+# @task()
+# def response_converter():
+#     sleep(10)
+#     response = 'Аудио файл'
+#     # new_view(response)
+#     new_view2(response)
 
 
 # def new_view(voice):

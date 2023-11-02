@@ -4,6 +4,9 @@
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
+        {{ form_file.non_form_errors }}
+        {{ form_file.management_form }}
+        {{ form_file.as_p }}
         <p><input type="submit" value="Добавить голос"></p>
     </form>
 {% endblock %}
