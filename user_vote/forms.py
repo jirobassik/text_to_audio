@@ -1,5 +1,7 @@
 from django import forms
 from django.forms import inlineformset_factory
+from taggit.models import Tag
+
 from .models import UserVoteModel, UserAudioFile
 
 
@@ -22,18 +24,20 @@ class MultipleFileField(forms.FileField):
 
 
 class FileFieldForm(forms.ModelForm):
+    audio_file = MultipleFileField()
+
     class Meta:
         model = UserAudioFile
         fields = ['audio_file']
 
-    audio_file = MultipleFileField()
-
 
 class UserVoteForm(forms.ModelForm):
+    tags = forms.ModelMultipleChoiceField(label='Тэги', queryset=Tag.objects.all(), empty_label='Стандартный')
+
     class Meta:
         model = UserVoteModel
         fields = ['audio_name', 'tags']
 
 
-UserVoteInlineFormat = inlineformset_factory(UserVoteModel, UserAudioFile, form=FileFieldForm,
+UserVoteInlineFormat = inlineformset_factory(UserVoteModel, UserAudioFile, form=FileFieldForm, formset=FileFieldForm,
                                              can_delete=False, extra=1, fields=('audio_file',), max_num=5)

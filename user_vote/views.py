@@ -75,8 +75,7 @@ class CreateVoteView(LoginRequiredMixin, CreateView):
         return context
 
     def post(self, request, *args, **kwargs):
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
+        form = self.get_form()
         form_file = UserVoteInlineFormat(data=self.request.POST, files=self.request.FILES)
         if form.is_valid() and form_file.is_valid():
             return self.form_valid(form, form_file)
@@ -92,10 +91,10 @@ class CreateVoteView(LoginRequiredMixin, CreateView):
         )
 
     @override(check_signature=False)
-    def form_valid(self, form, form_file):  # TODO добавить проверку что поле файла не пустое
+    def form_valid(self, form, form_file):
         form.instance.user_vote = self.request.user
         self.object = form.save()  # TODO Разобраться с save
-        files = form_file.cleaned_data[0].get('audio_file')
+        files = form_file.cleaned_data.get('audio_file')
         for file in files:
             UserAudioFile.objects.create(user_voice_name=self.object, audio_file=file)
         return HttpResponseRedirect(self.success_url)
