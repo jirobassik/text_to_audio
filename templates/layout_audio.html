@@ -59,7 +59,6 @@
             {% for message in messages %}
                 <li class="{{ message.tags }}">
                     {{ message|safe }}
-                    <a href="{% url 'history-view' %}" class="close">x</a>
                 </li>
             {% endfor %}
         </ul>

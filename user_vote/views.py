@@ -1,13 +1,13 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from taggit.models import Tag
 from overrides import override
 from user_vote.forms import UserVoteForm, UserVoteInlineFormat
 from user_vote.models import UserVoteModel, UserAudioFile
-from utils.server_converter.init_json_ser_req import text_converter_serializer, add_voice_serializer, add_voice_request
+from utils.server_converter.init_json_ser_req import add_delete_voice_serializer, add_delete_voice_request
 
 
 class UserVoteView(LoginRequiredMixin, ListView):
@@ -40,26 +40,6 @@ class UserVoteTagView(LoginRequiredMixin, ListView):
         return self.model.objects.access_user(self.request.user).filter(tags__in=[tag])
 
 
-# class CreateVoteView(LoginRequiredMixin, CreateView): # TODO Добавить запрос на доб файлов
-#     model = UserVoteModel
-#     fields = ['audio_name', 'user_audio_file', 'tags']
-#     template_name = 'user_vote/vote_form.html'
-#     success_url = reverse_lazy('vote-view-user')
-#
-#     def form_valid(self, form):
-#         form.instance.user_vote = self.request.user
-#         audio_name = form.cleaned_data['audio_name']
-#         user_audio_file = form.cleaned_data['user_audio_file']
-#         data_json = add_voice_serializer.encode(audio_name=audio_name)
-#         audio_file = user_audio_file
-#         print(audio_file)
-#         payload = {
-#             'data': (None, data_json, 'application/json'),
-#             'file1': (audio_file.name, audio_file.read(), 'audio/wav'),
-#         }
-#         add_voice_request.get_request_data(payload)
-#         return super().form_valid(form)
-
 class CreateVoteView(LoginRequiredMixin, CreateView):
     form_class = UserVoteForm
     template_name = 'user_vote/vote_form.html'
@@ -86,7 +66,7 @@ class CreateVoteView(LoginRequiredMixin, CreateView):
     def form_invalid(self, form, form_file):
         return self.render_to_response(
             self.get_context_data(form=form,
-                                  product_meta_formset=form_file
+                                  form_file=form_file
                                   )
         )
 
@@ -94,7 +74,12 @@ class CreateVoteView(LoginRequiredMixin, CreateView):
     def form_valid(self, form, form_file):
         form.instance.user_vote = self.request.user
         self.object = form.save()  # TODO Разобраться с save
+        audio_name = self.object.audio_name
+        data_json = add_delete_voice_serializer.encode(audio_name=audio_name)
         files = form_file.cleaned_data.get('audio_file')
+        payload = {'data': (None, data_json, 'application/json')} | {
+            audio_file.name: (audio_file.name, audio_file.read(), 'audio/wav') for audio_file in files}
+        add_delete_voice_request.get_request_data(payload)
         for file in files:
             UserAudioFile.objects.create(user_voice_name=self.object, audio_file=file)
         return HttpResponseRedirect(self.success_url)
@@ -108,3 +93,10 @@ class UserVoteDeleteView(LoginRequiredMixin, DeleteView):
     def get_object(self, queryset=None):
         queryset = self.model.objects.access_user(self.request.user)
         return super().get_object(queryset)
+
+    def form_valid(self, form):
+        audio_name = self.object.audio_name
+        data_json = add_delete_voice_serializer.encode(audio_name=audio_name)
+        add_delete_voice_request.delete_request_data(data_json)
+
+        return super().form_valid(form)

@@ -32,7 +32,7 @@ class FileFieldForm(forms.ModelForm):
 
 
 class UserVoteForm(forms.ModelForm):
-    tags = forms.ModelMultipleChoiceField(label='Тэги', queryset=Tag.objects.all(), empty_label='Стандартный')
+    tags = forms.ModelMultipleChoiceField(label='Тэги', queryset=Tag.objects.all())
 
     class Meta:
         model = UserVoteModel

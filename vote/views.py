@@ -25,3 +25,7 @@ class DetailAudioView(DetailView):
     model = VoteModel
     template_name = 'vote/vote_detail.html'
     context_object_name = 'audio_files_detail'
+
+    def get_object(self, queryset=None):
+        queryset = self.model.objects.prefetch_related('audiofilemodel_set')
+        return super().get_object(queryset)

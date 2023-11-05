@@ -1,31 +1,39 @@
 {% extends 'layout_audio.html' %}
-
+{% load static %}
+{% block style %}{% static 'history/css/messages.css' %}{% endblock %}
 {% block content_main %}
 
     <form method="POST">
         {% csrf_token %}
-        <label for="text-input">Введите текст:</label>
-        <textarea id="text-input" name="text" rows="4" cols="50"></textarea>
-
-        <label for="voice-select">Выберите голос:</label>
-        <select id="voice-select" name="voice">
-            {% for vote in votes %}
-                <option value="{{ vote.id }}">{{ vote.audio_name }}</option>
-            {% endfor %}
-        </select>
-
-        <label for="preset-select">Выберите качество:</label>
-        <select id="preset-select" name="preset">
-            <option value="ultra_fast">Ultra fast</option>
-            <option value="fast">Fast</option>
-            <option value="quality">Quality</option>
-            <option value="high_quality">High quality</option>
-        </select>
-
+        {{ form.as_p }}
         <button type="submit" name="converter">Сгенерировать аудио</button>
     </form>
-    {% if voice %}
-        {{ voice }}
-    {% endif %}
 
 {% endblock %}
+
+
+{#        <label for="text-input">Введите текст:</label>#}
+{#        <textarea id="text-input" name="text" rows="4" cols="50"></textarea>#}
+{##}
+{#        <label for="voice-select">Выберите голос:</label>#}
+{#        <select id="voice-select" name="voice">#}
+{#            <optgroup label="Стандартные голоса">#}
+{#                {% for vote in votes %}#}
+{#                    <option value="{{ vote.id }}">{{ vote.audio_name }}</option>#}
+{#                {% endfor %}#}
+{#            </optgroup>#}
+{#            <optgroup label="Пользовательские голоса">#}
+{#                {% for vote in user_votes %}#}
+{#                    <option value="{{ vote.id }}">{{ vote.audio_name }}</option>#}
+{#                {% endfor %}#}
+{#            </optgroup>#}
+{#        </select>#}
+{##}
+{#        <label for="preset-select">Выберите качество:</label>#}
+{#        <select id="preset-select" name="preset">#}
+{#            <option value="ultra_fast">Ultra fast</option>#}
+{#            <option value="fast">Fast</option>#}
+{#            <option value="quality">Quality</option>#}
+{#            <option value="high_quality">High quality</option>#}
+{#        </select>#}
+{##}

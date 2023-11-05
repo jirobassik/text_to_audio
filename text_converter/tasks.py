@@ -4,6 +4,8 @@ from django.urls import reverse
 from huey import crontab
 from huey.contrib.djhuey import periodic_task, task, db_task
 from history.models import HistoryModel
+from user_vote.models import UserVoteModel
+from utils.server_converter.init_json_ser_req import text_converter_serializer
 from vote.models import VoteModel
 from time import sleep
 
@@ -25,7 +27,9 @@ from time import sleep
 #     return HttpResponseRedirect(reverse('text-to-audio-voice', args=(voice,)))
 
 @db_task()
-def add_response_api_converter(text: str, voice: int, user):
+def add_response_api_converter(text: str, voice_id: int, preset: str, owner: str, user):
+    voice_name = VoteModel.objects.get(id=voice_id).audio_name if owner == 'standart_v' \
+        else UserVoteModel.objects.get(id=voice_id).audio_name
+    data_json = text_converter_serializer.encode(text=text, voice=voice_name, preset=preset, owner=owner)
     sleep(10)
-    test_voice_file = VoteModel.objects.get(id=voice)
-    HistoryModel(text=text, audio_file=test_voice_file.audio_file, use_vote=test_voice_file, user=user).save()
+    # HistoryModel(text=text, audio_file=test_voice_file.audio_file, use_vote=test_voice_file, user=user).save()

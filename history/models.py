@@ -28,10 +28,6 @@ class HistoryModel(models.Model):
             models.Index(fields=['text'])
         ]
 
-    def delete(self, using=None, keep_parents=False):
-        pathlib.Path('media', self.audio_file.name).unlink(missing_ok=False)
-        super().delete()
-
     def get_absolute_url(self):
         return reverse('history-detail', args=[self.id])
 
@@ -43,4 +39,6 @@ class HistoryModel(models.Model):
 @receiver(pre_delete, sender=HistoryModel)
 def history_pre_delete(sender, instance, **kwargs):
     file_name = instance.audio_file.name
-    pathlib.Path('media', file_name).unlink(missing_ok=False)
+    path = pathlib.Path('media', file_name)
+    if path.exists():
+        path.unlink(missing_ok=False)

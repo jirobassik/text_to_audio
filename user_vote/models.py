@@ -14,21 +14,7 @@ class UserAccessManager(models.Manager):
         return super().get_queryset().filter(user_vote=user)
 
 
-# class UserVoteModel(CommonVoteModel):
-#     user_audio_file = models.FileField('Путь к аудио', unique=True, upload_to='user_vote_media')
-#     user_vote = models.ForeignKey(User, on_delete=models.CASCADE)
-#
-#     objects = UserAccessManager()
-#
-#     def delete(self, using=None, keep_parents=False):
-#         pathlib.Path('media', self.user_audio_file.name).unlink(missing_ok=False)
-#         super().delete()
-#
-#     def get_absolute_url(self):
-#         return reverse('vote-detail-user', args=[self.id])
-
-
-class UserVoteModel(CommonVoteModel):
+class UserVoteModel(CommonVoteModel):  # TODO Если нет связанных файлов, то нельзя что-то
     user_vote = models.ForeignKey(User, on_delete=models.CASCADE)
 
     objects = UserAccessManager()
@@ -41,15 +27,11 @@ class UserAudioFile(models.Model):
     user_voice_name = models.ForeignKey(UserVoteModel, on_delete=models.CASCADE, verbose_name='Принадлежит голосу')
     audio_file = models.FileField('Путь к аудио', upload_to='user_vote_media')
 
-    def delete(self, using=None, keep_parents=False):
-        pathlib.Path('media', self.audio_file.name).unlink(missing_ok=False)
-        super().delete()
-
     def __str__(self):
         return self.audio_file.name
 
 
 @receiver(pre_delete, sender=UserAudioFile)
-def user_audio_file_post_delete(sender, instance, **kwargs):
+def user_audio_file_pre_delete(sender, instance, **kwargs):
     file = instance.audio_file.name
     pathlib.Path('media', file).unlink(missing_ok=False)

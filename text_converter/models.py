@@ -1,8 +1,9 @@
 class TextConverterModel:
-    def __init__(self, text, voice, preset):
+    def __init__(self, text, voice, preset, owner):
         self.text = text
         self.voice = voice
         self.preset = preset
+        self.owner = owner
 
 
 class AddVoiceModel:
