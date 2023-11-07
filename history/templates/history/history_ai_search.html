@@ -1,17 +1,18 @@
 {% extends 'layout_audio.html' %}
 {% load static %}
 {% load custom_tag %}
-
+{% block style %}{% static 'history/css/messages.css' %}{% endblock %}
+{% block style2 %}{% static 'history/css/history.css' %}{% endblock %}
 {% block content_main %}
     <h1>История</h1>
-{#    <form action="{% url 'history-search' %}" method="get">#}
-        {#    Здесь не нужен csrf token?#}
-{#        <label>#}
-{#            <input name="input_query" type="text" placeholder="Введите запрос">#}
-{#            <button>Search</button>#}
-{#        </label>#}
-{#    </form>#}
-        <form id="search-form">
+    {#    <form action="{% url 'history-search' %}" method="get">#}
+    {#    Здесь не нужен csrf token?#}
+    {#        <label>#}
+    {#            <input name="input_query" type="text" placeholder="Введите запрос">#}
+    {#            <button>Search</button>#}
+    {#        </label>#}
+    {#    </form>#}
+    <form id="search-form">
         <label for="input_query">Search:</label>
         <input type="text" name="input_query" id="input_query" placeholder="Enter your query">
 
@@ -41,37 +42,43 @@
             this.submit();
         });
     </script>
-    {% get_columns history_ai_entries as columns %}
-    <table>
-        <thead>
-        <tr>
-            {% for column in columns %}
-                <th>{% get_columns_name column %}</th>
-            {% endfor %}
-        </tr>
-        </thead>
-        <tbody>
-        {% for ai_entry in history_ai_entries %}
+    {% if history_ai_entries %}
+        {% get_columns history_ai_entries as columns %}
+        <table>
+            <thead>
             <tr>
                 {% for column in columns %}
-                    {% get_column_data column ai_entry as data %}
-                    {% if column == "audio_file" %}
-                        <td>
-                            <audio controls>
-                                <source src="{{ data.audio_file.url }}" type="audio/mpeg">
-                                Your browser does not support the audio element.
-                            </audio>
-                        </td>
-                    {% elif column == "use_vote" %}
-                        <td><a href="{% url 'vote-view' %}" class="nav-link"
-                               data-id="{{ data.use_vote_id }}">{{ data.use_vote }} </a></td>
-                    {% else %}
-                        <td>{{ data }}</td>
-                    {% endif %}
+                    <th>{% get_columns_name column %}</th>
                 {% endfor %}
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            {% for ai_entry in history_ai_entries %}
+                <tr>
+                    {% for column in columns %}
+                        {% get_column_data column ai_entry as data %}
+                        {% if column == "audio_file" %}
+                            <td>
+                                <audio controls>
+                                    <source src="{{ data.audio_file.url }}" type="audio/mpeg">
+                                    Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                        {% elif column == "use_vote" %}
+                            <td><a href="{% url 'vote-view' %}" class="nav-link"
+                                   data-id="{{ data.use_vote_id }}">{{ data.use_vote }} </a></td>
+                        {% else %}
+                            <td>{{ data }}</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% elif search %}
+        <h5>Ничего не найдено</h5>
+    {% else %}
+
+    {% endif %}
 
 {% endblock %}

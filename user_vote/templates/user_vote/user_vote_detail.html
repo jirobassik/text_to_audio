@@ -1,15 +1,20 @@
 {% extends 'layout_audio.html' %}
 {% load static %}
+{% block style %}{% static 'user_vote/css/user_vote_detail.css' %}{% endblock %}
 {% block content_main %}
-    {{ user_vote_detail.audio_name }}
-    {% for tag in user_vote_detail.tags.all %}
-        {{ tag.name }}
-        {% if not forloop.last %}, {% endif %}
-    {% endfor %}
-    <h3>Аудио для голоса</h3>
-    {% for audio in user_vote_detail.useraudiofile_set.all %}
-        <audio controls>
-            <source src="{{ audio.audio_file.url }}" type="audio/mpeg">
-        </audio>
-    {% endfor %}
+    <div class="audio-card">
+        <h2>{{ user_vote_detail.audio_name }}</h2>
+        <h5>
+            Тэги:
+            {% for tag in user_vote_detail.tags.all %}
+                {{ tag.name }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </h5>
+        <h4>Используемые аудио</h4>
+        {% for audio in user_vote_detail.useraudiofile_set.all %}
+            <audio controls>
+                <source src="{{ audio.audio_file.url }}" type="audio/mpeg">
+            </audio>
+        {% endfor %}
+    </div>
 {% endblock %}

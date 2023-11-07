@@ -1,30 +1,35 @@
 {% extends 'layout_audio.html' %}
 {% load static %}
-{% block style %}{% static 'vote/css/card.css' %}{% endblock %}
+{% block style %}{% static 'user_vote/css/user_votes.css' %}{% endblock %}
 
 {% block content_main %}
     {% if user_vote %}
         <h1>Пользовательские голосов</h1>
-        {% for audio in user_vote %}
-            <div class="audio-card" id="{{ audio.id }}">
-                <h2>{{ audio.audio_name }}</h2>
-{#                <audio id="audio-player-{{ forloop.counter }}" controls>#}
-{#                    <source src="{{ audio.user_audio_file.url }}" type="audio/mpeg">#}
-{#                </audio>#}
-                <a href="{{ audio.get_absolute_url }}">Аудио</a>
-                <h4>Тэги:</h4>
-                <h5>
-                    {% for tag in audio.tags.all %}
-                        <a href="{% url 'vote-tag-view-user' tag.slug %}">{{ tag.name }}</a>
-                        {% if not forloop.last %}, {% endif %}
-                    {% endfor %}
-                </h5>
-                <a href="{% url 'vote-delete-user' audio.id %}">Удалить голос</a>
+
+        <div class="file-cards">
+            <div class="file-card plus-card">
+                <a href="{% url 'vote-create-user' %}"><i class="bi bi-plus-circle-dotted" style="font-size: 5rem; color: gray"></i></a>
             </div>
-        {% endfor %}
-        <a href="{% url 'vote-create-user' %}">Добавить свой голос</a>
+            {% for audio in user_vote %}
+                <div class="file-card" id="{{ audio.id }}">
+                    <h2>{{ audio.audio_name }}</h2>
+                    <h5>
+                        Тэги:
+                        {% for tag in audio.tags.all %}
+                            <a href="{% url 'vote-tag-view-user' tag.slug %}" class="tag-link">
+                                {{ tag.name }}</a>{% if not forloop.last %},{% endif %}
+                        {% endfor %}
+                    </h5>
+                    <hr>
+                    <a href="{{ audio.get_absolute_url }}" class="audio-button">Подробнее</a>
+                    <a href="{% url 'vote-delete-user' audio.id %}" class="delete-button"><i
+                            class="bi bi-trash"></i></a>
+                </div>
+            {% endfor %}
+        </div>
     {% else %}
-        <p>Вы ещё не добавили свой голос, вы можете сделать это нажав <a href="{% url 'vote-create-user' %}">добавить свой
+        <p>Вы ещё не добавили свой голос, вы можете сделать это нажав <a href="{% url 'vote-create-user' %}">добавить
+            свой
             голос</a></p>
     {% endif %}
 

@@ -1,0 +1,59 @@
+#id_text {
+    width: 100%;
+    height: 150px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+optgroup {
+    font-weight: bold;
+}
+
+option {
+    padding: 5px;
+}
+
+
+button {
+    width: 100%;
+    padding: 14px 0;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    background: #6e93f7;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background: #4070f4;
+}
+
+.text-converter-form {
+    text-align: left;
+}
+
+.error-message {
+    color: red;
+}
+
+.text-converter-form {
+    width: 500px;
+    margin: 20px auto 0;
+}
+
+.text-converter-form form {
+    background-color: #f2f2f2;
+    padding: 20px;
+    border-radius: 5px;
+}

@@ -1,14 +1,18 @@
 {% extends 'layout_audio.html' %}
 {% load static %}
 {% block style %}{% static 'history/css/messages.css' %}{% endblock %}
+{% block style2 %}{% static 'text_converter/css/text_to_audio.css' %}{% endblock %}
+{% block title %}Text to voice{% endblock %}
 {% block content_main %}
 
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" name="converter">Сгенерировать аудио</button>
-    </form>
-
+    <div class="text-converter-form">
+    <h1>Текст в голос</h1>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" name="converter">Сгенерировать аудио</button>
+        </form>
+    </div>
 {% endblock %}
 
 

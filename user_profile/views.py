@@ -2,6 +2,7 @@ from django.shortcuts import render
 
 from user_profile.forms import RegistrationForm
 
+# TODO Можно перейти по ссылке выхода, убрать ниже код
 def register(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)

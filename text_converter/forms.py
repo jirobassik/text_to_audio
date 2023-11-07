@@ -2,10 +2,12 @@ from django import forms
 
 
 class TextConverterForm(forms.Form):
-    text = forms.CharField(max_length=1000, min_length=1, required=True)
-    voice = forms.ChoiceField(choices=[], widget=forms.Select(attrs={'id': 'voice-select'}))
-    preset = forms.ChoiceField(choices=[('ultra_fast', 'Ultra fast'), ('fast', 'Fast'),
-                                        ('quality', 'Quality'), ('high_quality', 'High quality')])
+    text = forms.CharField(max_length=1000, min_length=1, required=True, widget=forms.Textarea, initial='Привет мир',
+                           label='Текст')
+    voice = forms.ChoiceField(choices=[], widget=forms.Select(attrs={'id': 'voice-select'}), label='Голос')
+    preset = forms.ChoiceField(choices=[('ultra_fast', 'Очень быстро'), ('fast', 'Быстро'),
+                                        ('quality', 'Качество'), ('high_quality', 'Высокое качество')],
+                               label='Скорость/Качество')
 
     def __init__(self, *args, **kwargs):
         votes = kwargs.pop('votes', [])

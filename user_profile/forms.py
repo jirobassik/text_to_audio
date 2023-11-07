@@ -3,13 +3,15 @@ from django.contrib.auth.models import User
 
 
 class RegistrationForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput)
-    password2 = forms.CharField(widget=forms.PasswordInput)
+    password = forms.CharField(widget=forms.PasswordInput, label='Пароль')
+    password2 = forms.CharField(widget=forms.PasswordInput, label='Повторите пароль')
+    email = forms.EmailField(required=True, label='Почта')
 
     class Meta:
         model = User
         fields = ['username', 'first_name', 'email']
 
+    # TODO Дублируются ошибки
     def clean_password2(self):
         cd = self.cleaned_data
         password2_data = cd['password2']

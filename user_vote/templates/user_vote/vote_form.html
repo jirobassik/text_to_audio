@@ -1,12 +1,16 @@
 {% extends "layout_audio.html" %}
+{% load static %}
+{% block style %}{% static 'user_vote/css/vote_form.css' %}{% endblock %}
 {% block content_main %}
-    <h1>Добавление нового голоса</h1>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        {{ form_file.non_form_errors }}
-        {{ form_file.management_form }}
-        {{ form_file.as_p }}
-        <p><input type="submit" value="Добавить голос"></p>
-    </form>
+    <div class="text-converter-form">
+    <h1 class="add-voice-title">Добавление нового голоса</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            {{ form_file.non_form_errors }}
+            {{ form_file.management_form }}
+            {{ form_file.as_p }}
+            <p><input type="submit" value="Добавить голос"></p>
+        </form>
+    </div>
 {% endblock %}

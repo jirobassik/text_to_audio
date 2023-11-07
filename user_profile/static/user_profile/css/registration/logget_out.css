@@ -1,0 +1,22 @@
+.logged-out-title {
+    text-align: left;
+    color: #333;
+    font-size: 30px;
+}
+
+.logged-out-message {
+    text-align: left;
+    color: #777;
+    font-size: 20px;
+    margin-top: 10px;
+}
+
+.logged-out-link {
+    color: #4CAF50;
+    text-decoration: none;
+}
+
+.logged-out-link:hover {
+    text-decoration: none;
+    color: grey;
+}

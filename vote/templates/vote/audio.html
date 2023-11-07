@@ -4,24 +4,22 @@
 
 {% block content_main %}
     <h1>Список голосов</h1>
-
-    {% for audio in audio_files %}
-        <div class="audio-card" id="{{ audio.id }}">
-            <h2>{{ audio.audio_name }}</h2>
-{#            <audio id="audio-player-{{ forloop.counter }}" controls>#}
-{#                <source src="{{ audio.audio_file.url }}" type="audio/mpeg">#}
-{#            </audio>#}
-            <a href="{{ audio.get_absolute_url }}">Аудио</a>
-            <h4>Тэги:</h4>
-            <h5>
-                {% for tag in audio.tags.all %}
-                    <a href="{% url 'vote-tag-view' tag.slug %}">{{ tag.name }}</a>
-                    {% if not forloop.last %}, {% endif %}
-                {% endfor %}
-            </h5>
-        </div>
-    {% endfor %}
-
+    <div class="file-cards">
+        {% for audio in audio_files %}
+            <div class="file-card" id="{{ audio.id }}">
+                <h2>{{ audio.audio_name }}</h2>
+                <h5>
+                    Тэги:
+                    {% for tag in audio.tags.all %}
+                        <a href="{% url 'vote-tag-view' tag.slug %}" class="tag-link">{{ tag.name }}</a>{% if not forloop.last %},
+                    {% endif %}
+                    {% endfor %}
+                </h5>
+                <hr>
+                <a href="{{ audio.get_absolute_url }}" class="audio-button">Подробнее</a>
+            </div>
+        {% endfor %}
+    </div>
     <script>
         function playAudio(audioId) {
             var audioPlayer = document.getElementById("audio-player-" + audioId);

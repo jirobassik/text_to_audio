@@ -1,11 +1,14 @@
 {% extends "layout_audio.html" %}
+{% load static %}
+{% block style %}{% static 'user_profile/css/registration/register.css' %}{% endblock %}
 {% block title %}Create an account{% endblock %}
 {% block content_main %}
-    <h1>Create an account</h1>
-    <p>Please, sign up using the following form:</p>
-    <form method="post">
-        {{ user_form.as_p }}
-        {% csrf_token %}
-        <p><input type="submit" value="Create my account"></p>
-    </form>
+    <div class="text-converter-form">
+    <h1 class="text-converter-form">Создание аккаунта</h1>
+        <form method="post">
+            {{ user_form.as_p }}
+            {% csrf_token %}
+            <p><input type="submit" value="Создать аккаунт"></p>
+        </form>
+    </div>
 {% endblock %}

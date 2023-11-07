@@ -41,6 +41,11 @@ class HistoryAiSearchView(LoginRequiredMixin, ListView):
     template_name = 'history/history_ai_search.html'
     context_object_name = 'history_ai_entries'
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search'] = True
+        return context
+
     def get_queryset(self):
         query = self.request.GET.get('input_query', '')
         return vanna_get_queryset(self, query)
@@ -50,6 +55,11 @@ class HistorySearchView(LoginRequiredMixin, ListView):
     model = HistoryModel
     context_object_name = 'history_entries'
     template_name = 'history/history.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search'] = True
+        return context
 
     def get_queryset(self):
         query = self.request.GET.get('input_query', '')

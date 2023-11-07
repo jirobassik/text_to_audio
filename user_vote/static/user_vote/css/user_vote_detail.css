@@ -1,0 +1,28 @@
+.audio-card {
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    padding: 20px;
+    width: 40%;
+    margin: 30px auto;
+}
+
+.audio-card h2 {
+    font-size: 26px;
+    margin-bottom: 10px;
+}
+
+.audio-card h4 {
+    font-size: 17px;
+    margin-bottom: 7px;
+}
+
+.audio-card h5 {
+    font-size: 19px;
+    margin-bottom: 15px;
+}
+
+.audio-card audio {
+    display: block;
+    margin-bottom: 10px;
+}

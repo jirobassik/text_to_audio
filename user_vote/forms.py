@@ -24,7 +24,7 @@ class MultipleFileField(forms.FileField):
 
 
 class FileFieldForm(forms.ModelForm):
-    audio_file = MultipleFileField()
+    audio_file = MultipleFileField(label='Аудио файлы')
 
     class Meta:
         model = UserAudioFile

@@ -1,0 +1,26 @@
+form {
+  margin: 20px;
+  padding: 20px;
+  border: 1px solid #dddddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  width: 500px;
+}
+
+form p {
+  margin-bottom: 10px;
+}
+
+form input[type="submit"] {
+  background-color: grey;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+form input[type="submit"]:hover {
+  background-color: black;
+}

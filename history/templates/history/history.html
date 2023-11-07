@@ -1,29 +1,22 @@
 {% extends 'layout_audio.html' %}
 {% load static %}
 {% load custom_tag %}
-
 {% block style %}{% static 'history/css/messages.css' %}{% endblock %}
-
+{% block style2 %}{% static 'history/css/history.css' %}{% endblock %}
 {% block content_main %}
     <h1>История</h1>
     {% if history_entries %}
-        {#    <form action="{% url 'history-search' %}" method="get">#}
-        {#        <label>#}
-        {#            <input name="input_query" type="text" placeholder="Введите запрос">#}
-        {#            <button>Search</button>#}
-        {#        </label>#}
-        {#    </form>#}
         <form id="search-form">
-            <label for="input_query">Search:</label>
-            <input type="text" name="input_query" id="input_query" placeholder="Enter your query">
+            <label for="input_query"></label>
+            <input type="text" name="input_query" id="input_query" placeholder="Введите ваш запрос">
 
-            <label for="search_type">Search Type:</label>
+            <label for="search_type"></label>
             <select name="search_type" id="search_type">
-                <option value="standard">Standard</option>
-                <option value="ai">AI</option>
+                <option value="standard">Стандартный</option>
+                <option value="ai">ИИ</option>
             </select>
 
-            <button type="submit">Search</button>
+            <button type="submit">Поиск</button>
         </form>
 
         <script>
@@ -57,11 +50,7 @@
                 <tr>
                     <td>{{ entry.text }}</td>
                     <td>
-                        {#                    <audio controls>#}
-                        {#                        <source src="{{ entry.audio_file.url }}" type="audio/mpeg">#}
-                        {#                        Your browser does not support the audio element.#}
                         <a href="{{ entry.get_absolute_url }}">Аудио</a>
-                        {#                    </audio>#}
                     </td>
                     <td><a href="{% url 'vote-view' %}" class="nav-link"
                            data-id="{{ entry.use_vote_id }}">{{ entry.use_vote }} </a></td>
@@ -70,6 +59,8 @@
             {% endfor %}
             </tbody>
         </table>
+    {% elif search %}
+        <h5>Ничего не найдено</h5>
     {% else %}
         <h5>Пока нет истории, она появится как только преобразуйте текст в голос!</h5>
     {% endif %}

@@ -1,0 +1,81 @@
+.login-title {
+    text-align: center;
+}
+
+.error-message {
+    color: red;
+}
+
+.register-link {
+    color: grey;
+}
+
+.login-form {
+    width: 300px;
+    margin: 30px auto 0;
+}
+
+.login-form form {
+    background-color: #f2f2f2;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.login-form input[type="text"],
+.login-form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.login-form input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.login-form input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+.login-form p {
+    margin-top: 10px;
+}
+
+.login-form p {
+    margin-top: 10px;
+}
+
+.forgot-password-link {
+    color: #4CAF50;
+    text-decoration: none;
+}
+
+.forgot-password-link:hover {
+    color: grey;
+    text-decoration: none;
+}
+
+.register-prompt {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.register-prompt a {
+    color: #4CAF50;
+    text-decoration: none;
+}
+
+.register-prompt a:hover {
+    text-decoration: none;
+    color: grey;
+}
