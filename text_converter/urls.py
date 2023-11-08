@@ -1,6 +1,6 @@
 from django.urls import path
-from . import views
+from text_converter.views import TextConverterView
 
 urlpatterns = [
-    path('', views.TextConverterFormView.as_view(), name='text-to-audio'),
+    path('', TextConverterView.as_view(), name='text-to-audio'),
 ]
