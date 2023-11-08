@@ -11,17 +11,16 @@ class RegistrationForm(forms.ModelForm):
         model = User
         fields = ['username', 'first_name', 'email']
 
-    # TODO Дублируются ошибки
     def clean_password2(self):
         cd = self.cleaned_data
         password2_data = cd['password2']
         if cd['password'] != password2_data:
-            raise forms.ValidationError('Пароли не совпадают')
+            self.add_error('password', forms.ValidationError('Пароли не совпадают'))
         return password2_data
 
     def clean_email(self):
         cd = self.cleaned_data['email']
-        if User.objects.filter(email=cd).exists():
+        if User.objects.filter(email=cd).exists() and not self.has_error('username'):
             self.add_error('username',
                            forms.ValidationError('Неправильное сочетание имени пользователя, пароля и почты'))
         return cd
@@ -29,5 +28,6 @@ class RegistrationForm(forms.ModelForm):
     def clean_username(self):
         cd = self.cleaned_data['username']
         if User.objects.filter(username=cd).exists():
-            raise forms.ValidationError('Неправильное сочетание имени пользователя, пароля и почты')
+            self.add_error('username',
+                           forms.ValidationError('Неправильное сочетание имени пользователя, пароля и почты'))
         return cd

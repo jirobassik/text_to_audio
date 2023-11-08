@@ -38,6 +38,12 @@ class UserVoteForm(forms.ModelForm):
         model = UserVoteModel
         fields = ['audio_name', 'tags']
 
+    def clean_audio_name(self):
+        cd = self.cleaned_data['audio_name']
+        if UserVoteModel.objects.filter(audio_name=cd).exists():
+            self.add_error('audio_name', forms.ValidationError('Голос с таким названием уже существует'))
+        return cd
+
 
 UserVoteInlineFormat = inlineformset_factory(UserVoteModel, UserAudioFile, form=FileFieldForm, formset=FileFieldForm,
                                              can_delete=False, extra=1, fields=('audio_file',), max_num=5)

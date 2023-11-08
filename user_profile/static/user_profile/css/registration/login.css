@@ -79,3 +79,8 @@
     text-decoration: none;
     color: grey;
 }
+
+.errorlist {
+    list-style: none;
+    margin-right: 30px;
+}

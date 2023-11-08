@@ -1,5 +1,5 @@
 .text-converter-form {
-    text-align: center;
+    text-align: left;
 }
 
 .error-message {
@@ -61,4 +61,9 @@
 .register-prompt a:hover {
     text-decoration: none;
     color: grey;
+}
+
+.errorlist {
+    list-style: none;
+    margin-right: 30px;
 }
