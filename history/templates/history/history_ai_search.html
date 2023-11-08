@@ -12,37 +12,38 @@
     {#            <button>Search</button>#}
     {#        </label>#}
     {#    </form>#}
-    <form id="search-form">
-        <label for="input_query">Search:</label>
-        <input type="text" name="input_query" id="input_query" placeholder="Enter your query">
-
-        <label for="search_type">Search Type:</label>
-        <select name="search_type" id="search_type">
-            <option value="standard">Standard</option>
-            <option value="ai">AI</option>
-        </select>
-
-        <button type="submit">Search</button>
-    </form>
-
-    <script>
-        document.getElementById('search-form').addEventListener('submit', function (event) {
-            event.preventDefault();
-            var searchType = document.getElementById('search_type').value;
-            var query = document.getElementById('input_query').value;
-            var actionUrl = '';
-
-            if (searchType === 'standard') {
-                actionUrl = '{% url "history-search" %}';
-            } else if (searchType === 'ai') {
-                actionUrl = '{% url "history-ai-search" %}';
-            }
-
-            this.action = actionUrl;
-            this.submit();
-        });
-    </script>
     {% if history_ai_entries %}
+        <form id="search-form">
+            <label for="input_query"></label>
+            <input type="text" name="input_query" id="input_query" placeholder="Введите ваш запрос">
+
+            <label for="search_type"></label>
+            <select name="search_type" id="search_type">
+                <option value="standard">Стандартный</option>
+                <option value="ai">ИИ</option>
+            </select>
+
+            <button type="submit">Поиск</button>
+        </form>
+
+        <script>
+            document.getElementById('search-form').addEventListener('submit', function (event) {
+                event.preventDefault();
+                var searchType = document.getElementById('search_type').value;
+                var query = document.getElementById('input_query').value;
+                var actionUrl = '';
+
+                if (searchType === 'standard') {
+                    actionUrl = '{% url "history-search" %}';
+                } else if (searchType === 'ai') {
+                    actionUrl = '{% url "history-ai-search" %}';
+                }
+
+                this.action = actionUrl;
+                this.submit();
+            });
+        </script>
+
         {% get_columns history_ai_entries as columns %}
         <table>
             <thead>
@@ -59,14 +60,10 @@
                         {% get_column_data column ai_entry as data %}
                         {% if column == "audio_file" %}
                             <td>
-                                <audio controls>
-                                    <source src="{{ data.audio_file.url }}" type="audio/mpeg">
-                                    Your browser does not support the audio element.
-                                </audio>
+                                <a href="{{ data.audio_file }}">Аудио</a>
                             </td>
                         {% elif column == "use_vote" %}
-                            <td><a href="{% url 'vote-view' %}" class="nav-link"
-                                   data-id="{{ data.use_vote_id }}">{{ data.use_vote }} </a></td>
+                            <td>{{ data.use_vote }}</td>
                         {% else %}
                             <td>{{ data }}</td>
                         {% endif %}

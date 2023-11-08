@@ -1,10 +1,15 @@
 {% extends 'layout_audio.html' %}
 {% load static %}
+{% block style %}{% static 'history/css/history_detail.css' %}{% endblock %}
 {% block content_main %}
-    {{ history_detail_entry.text }}
-    {{ history_detail_entry.time_add }}
-    {{ history_detail_entry.use_vote }}
-    <audio controls>
-        <source src="{{ history_detail_entry.audio_file.url }}" type="audio/mpeg">
-    </audio>
+    <div class="audio-card">
+        <h2>Текст: </h2>
+        <p>{{ history_detail_entry.text }}</p>
+        <h4>Время добавления: {{ history_detail_entry.time_add }}</h4>
+        <h4>Используемый голос: {{ history_detail_entry.content_object.audio_name }}</h4>
+        <h4>Результат озвучивания</h4>
+        <audio controls>
+            <source src="{{ history_detail_entry.audio_file.url }}" type="audio/mpeg">
+        </audio>
+    </div>
 {% endblock %}

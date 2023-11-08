@@ -1,9 +1,10 @@
 from django.contrib import admin
 from .models import VoteModel, AudioFileModel
-
+from history.admin import HistoryModelInline
 
 @admin.register(VoteModel)
 class VoteAdmin(admin.ModelAdmin):
+    inlines = [HistoryModelInline]
     list_display = ['audio_name', 'tag_list']
     list_filter = ['audio_name']
     search_fields = ['audio_name']

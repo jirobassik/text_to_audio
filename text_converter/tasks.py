@@ -28,8 +28,8 @@ from time import sleep
 
 @db_task()
 def add_response_api_converter(text: str, voice_id: int, preset: str, owner: str, user):
-    voice_name = VoteModel.objects.get(id=voice_id).audio_name if owner == 'standart_v' \
+    voice_object = VoteModel.objects.get(id=voice_id).audio_name if owner == 'standart_v' \
         else UserVoteModel.objects.get(id=voice_id).audio_name
-    data_json = text_converter_serializer.encode(text=text, voice=voice_name, preset=preset, owner=owner)
+    data_json = text_converter_serializer.encode(text=text, voice=voice_object.audio_name, preset=preset, owner=owner)
     sleep(10)
-    # HistoryModel(text=text, audio_file=test_voice_file.audio_file, use_vote=test_voice_file, user=user).save()
+    # HistoryModel(text=text, audio_file=test_voice_file.audio_file, use_vote=voice_object, user=user).save()

@@ -1,15 +1,18 @@
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
-
+from django.contrib.contenttypes.admin import GenericTabularInline
 from history.models import HistoryModel
 
 
+class HistoryModelInline(GenericTabularInline):
+    model = HistoryModel
+
 @admin.register(HistoryModel)
 class AdminHistory(admin.ModelAdmin):
-    list_display = ['text', 'audio_file', 'use_vote', 'time_add', 'user_history_link']
-    list_filter = ['text', 'use_vote', 'time_add', 'user']
-    search_fields = ['text', 'use_vote__audio_name', 'user']
+    list_display = ['text', 'audio_file', 'time_add', 'user_history_link']
+    list_filter = ['text', 'time_add', 'user']
+    search_fields = ['text' 'user']
     ordering = ['text', 'time_add']
 
     def user_history_link(self, obj):

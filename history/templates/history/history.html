@@ -52,8 +52,7 @@
                     <td>
                         <a href="{{ entry.get_absolute_url }}">Аудио</a>
                     </td>
-                    <td><a href="{% url 'vote-view' %}" class="nav-link"
-                           data-id="{{ entry.use_vote_id }}">{{ entry.use_vote }} </a></td>
+                    <td>{{ entry.content_object.audio_name }}</td>
                     <td>{{ entry.time_add }}</td>
                 </tr>
             {% endfor %}

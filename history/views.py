@@ -64,5 +64,5 @@ class HistorySearchView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         query = self.request.GET.get('input_query', '')
         filter_query = self.model.objects.history_user_access(self.request.user).annotate(
-            search=SearchVector('text', 'use_vote__audio_name')).filter(search=query)
+            search=SearchVector('text', 'vote_mod__audio_name', 'user_vote_mod__audio_name')).filter(search=query)
         return filter_query

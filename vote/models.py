@@ -1,11 +1,13 @@
 import pathlib
 
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 from django.urls import reverse
 from taggit.managers import TaggableManager
+from history.models import HistoryModel
 
 
 class CommonVoteModel(models.Model):
@@ -24,6 +26,7 @@ class CommonVoteModel(models.Model):
 
 
 class VoteModel(CommonVoteModel):
+    his_models = GenericRelation(HistoryModel, related_query_name='vote_mod')
 
     def get_absolute_url(self):
         return reverse('vote-detail-view', args=[self.id])

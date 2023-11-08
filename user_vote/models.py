@@ -1,11 +1,13 @@
 import pathlib
 
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 from django.urls import reverse
 
+from history.models import HistoryModel
 from vote.models import CommonVoteModel
 
 
@@ -16,6 +18,7 @@ class UserAccessManager(models.Manager):
 
 class UserVoteModel(CommonVoteModel):  # TODO Если нет связанных файлов, то нельзя что-то
     user_vote = models.ForeignKey(User, on_delete=models.CASCADE)
+    his_models = GenericRelation(HistoryModel, related_query_name='user_vote_mod')
 
     objects = UserAccessManager()
 

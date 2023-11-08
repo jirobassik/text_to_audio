@@ -36,7 +36,7 @@ class TextConverterFormView(FormView):
         text = form.cleaned_data.get('text')
         voice_id = form.cleaned_data.get('voice')
         preset = form.cleaned_data.get('preset')
-        # add_response_api_converter(text, voice_id, preset, optgroup_name)
+        add_response_api_converter(text, voice_id, preset, optgroup_name)
         messages.success(self.request, 'Результат работы можно будет увидеть в истории')
         return HttpResponseRedirect(self.get_success_url())
 

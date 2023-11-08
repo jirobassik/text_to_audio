@@ -1,11 +1,13 @@
 import pathlib
 
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.db.models import Q
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 from django.urls import reverse
 from django.contrib.auth.models import User
-from vote.models import VoteModel
 
 class HistoryUserManager(models.Manager):
     def history_user_access(self, user):
@@ -15,9 +17,13 @@ class HistoryModel(models.Model):
     text = models.CharField('Озвученный текст', max_length=100, null=False, blank=False)
     audio_file = models.FileField('Результат озвучивания',
                                   upload_to='history_media', unique=False)  # TODO Подумать про хранение файлов
-    use_vote = models.ForeignKey(VoteModel, on_delete=models.CASCADE, verbose_name='Используемый голос')
     time_add = models.DateTimeField('Время добавления', auto_created=True, editable=False,
                                     auto_now_add=True)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE,
+                                     limit_choices_to=Q(model__in=['uservotemodel', 'votemodel']),
+                                     verbose_name='Тип голоса')
+    object_id = models.PositiveIntegerField(verbose_name='Принадлежит голосу')
+    content_object = GenericForeignKey("content_type", "object_id")
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
 
     objects = HistoryUserManager()
@@ -25,7 +31,7 @@ class HistoryModel(models.Model):
     class Meta:
         ordering = ['text']
         indexes = [
-            models.Index(fields=['text'])
+            models.Index(fields=['text', "content_type", "object_id"])
         ]
 
     def get_absolute_url(self):

@@ -58,11 +58,12 @@ th {
 }
 
 a {
-    color: blue;
+    color: grey;
     text-decoration: none;
 }
 
 a:hover {
-    text-decoration: underline;
+    text-decoration: none;
+    color: green;
 }
 

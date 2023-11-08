@@ -15,8 +15,8 @@ def get_columns_name(column_name: str):
 @register.simple_tag
 def get_column_data(column_name: str, ai_entry):
     dict_func = MappingProxyType({'text': ai_entry.text,
-                                  'audio_file': ai_entry.audio_file,
-                                  'use_vote': ai_entry.use_vote,
+                                  'audio_file': ai_entry.get_absolute_url,
+                                  'use_vote': ai_entry.content_object.audio_name,
                                   'time_add': ai_entry.time_add, })
     return dict_func.get(column_name, 'Не найдено (not found)')
 
