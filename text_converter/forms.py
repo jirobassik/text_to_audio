@@ -2,7 +2,7 @@ from django import forms
 
 
 class TextConverterLoginForm(forms.Form):
-    text = forms.CharField(max_length=1000, min_length=1, required=True, widget=forms.Textarea, initial='Привет мир',
+    text = forms.CharField(max_length=400, min_length=1, required=True, widget=forms.Textarea, initial='Привет мир',
                            label='Текст')
     voice = forms.ChoiceField(choices=[], widget=forms.Select(attrs={'id': 'voice-select'}), label='Голос')
     preset = forms.ChoiceField(choices=[('ultra_fast', 'Очень быстро'), ('fast', 'Быстро'),
@@ -23,7 +23,7 @@ class TextConverterLoginForm(forms.Form):
 
 
 class TextConverterForm(forms.Form):
-    text = forms.CharField(max_length=1000, min_length=1, required=True, widget=forms.Textarea, initial='Привет мир',
+    text = forms.CharField(max_length=400, min_length=1, required=True, widget=forms.Textarea, initial='Привет мир',
                            label='Текст')
     voice = forms.ChoiceField(choices=[], widget=forms.Select(attrs={'id': 'voice-select'}), label='Голос') # TODO Можно добавить валидатор
     preset = forms.ChoiceField(choices=[('ultra_fast', 'Очень быстро'), ('fast', 'Быстро'),

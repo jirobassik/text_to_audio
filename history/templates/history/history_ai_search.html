@@ -5,51 +5,46 @@
 {% block style2 %}{% static 'history/css/history.css' %}{% endblock %}
 {% block content_main %}
     <h1>История</h1>
-    {#    <form action="{% url 'history-search' %}" method="get">#}
-    {#    Здесь не нужен csrf token?#}
-    {#        <label>#}
-    {#            <input name="input_query" type="text" placeholder="Введите запрос">#}
-    {#            <button>Search</button>#}
-    {#        </label>#}
-    {#    </form>#}
+    <form id="search-form">
+        {% csrf_token %}
+        <label for="input_query"></label>
+        <input type="text" name="input_query" id="input_query" placeholder="Введите ваш запрос">
+
+        <label for="search_type"></label>
+        <select name="search_type" id="search_type">
+            <option value="standard">Стандартный</option>
+            <option value="ai">ИИ</option>
+        </select>
+
+        <button type="submit">Поиск</button>
+    </form>
+
+    <script>
+        document.getElementById('search-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            var searchType = document.getElementById('search_type').value;
+            var query = document.getElementById('input_query').value;
+            var actionUrl = '';
+
+            if (searchType === 'standard') {
+                actionUrl = '{% url "history-search" %}';
+            } else if (searchType === 'ai') {
+                actionUrl = '{% url "history-ai-search" %}';
+            }
+
+            this.action = actionUrl;
+            this.submit();
+        });
+    </script>
     {% if history_ai_entries %}
-        <form id="search-form">
-            <label for="input_query"></label>
-            <input type="text" name="input_query" id="input_query" placeholder="Введите ваш запрос">
-
-            <label for="search_type"></label>
-            <select name="search_type" id="search_type">
-                <option value="standard">Стандартный</option>
-                <option value="ai">ИИ</option>
-            </select>
-
-            <button type="submit">Поиск</button>
-        </form>
-
-        <script>
-            document.getElementById('search-form').addEventListener('submit', function (event) {
-                event.preventDefault();
-                var searchType = document.getElementById('search_type').value;
-                var query = document.getElementById('input_query').value;
-                var actionUrl = '';
-
-                if (searchType === 'standard') {
-                    actionUrl = '{% url "history-search" %}';
-                } else if (searchType === 'ai') {
-                    actionUrl = '{% url "history-ai-search" %}';
-                }
-
-                this.action = actionUrl;
-                this.submit();
-            });
-        </script>
-
         {% get_columns history_ai_entries as columns %}
         <table>
             <thead>
             <tr>
                 {% for column in columns %}
-                    <th>{% get_columns_name column %}</th>
+                    {% if column != "object_id" and column != "user_id" %}
+                        <th>{% get_columns_name column %}</th>
+                    {% endif %}
                 {% endfor %}
             </tr>
             </thead>
@@ -57,25 +52,44 @@
             {% for ai_entry in history_ai_entries %}
                 <tr>
                     {% for column in columns %}
-                        {% get_column_data column ai_entry as data %}
-                        {% if column == "audio_file" %}
-                            <td>
-                                <a href="{{ data.audio_file }}">Аудио</a>
-                            </td>
-                        {% elif column == "use_vote" %}
-                            <td>{{ data.use_vote }}</td>
-                        {% else %}
-                            <td>{{ data }}</td>
+                        {% if column != "object_id" and column != "user_id" %}
+                            {% get_column_data column ai_entry as data %}
+                            {% if column == "audio_file" %}
+                                <td>
+                                    <a href="{{ data }}">Аудио</a>
+                                </td>
+                            {% elif column == "text" %}
+                                <td class="entry-text">{{ data }}</td>
+                            {% else %}
+                                <td>{{ data }}</td>
+                            {% endif %}
                         {% endif %}
                     {% endfor %}
                 </tr>
             {% endfor %}
             </tbody>
         </table>
+        <script>
+            const entryTextCells = document.querySelectorAll('.entry-text');
+
+            entryTextCells.forEach((cell) => {
+                const words = cell.innerText.split(' ');
+                let wrappedText = '';
+
+                for (let i = 0; i < words.length; i++) {
+                    if (i > 0 && i % 5 === 0) {
+                        wrappedText += '<br>';
+                    }
+                    wrappedText += words[i] + ' ';
+                }
+
+                cell.innerHTML = wrappedText;
+            });
+        </script>
     {% elif search %}
         <h5>Ничего не найдено</h5>
     {% else %}
-
+        <h5>Пока нет истории, она появится как только преобразуйте текст в голос!</h5>
     {% endif %}
 
 {% endblock %}

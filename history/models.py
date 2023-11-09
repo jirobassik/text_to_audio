@@ -14,7 +14,7 @@ class HistoryUserManager(models.Manager):
         return super().get_queryset().filter(user=user)
 
 class HistoryModel(models.Model):
-    text = models.CharField('Озвученный текст', max_length=100, null=False, blank=False)
+    text = models.CharField('Озвученный текст', max_length=400, null=False, blank=False)
     audio_file = models.FileField('Результат озвучивания',
                                   upload_to='history_media', unique=False)  # TODO Подумать про хранение файлов
     time_add = models.DateTimeField('Время добавления', auto_created=True, editable=False,
