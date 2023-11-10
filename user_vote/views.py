@@ -75,11 +75,11 @@ class CreateVoteView(LoginRequiredMixin, CreateView):
         form.instance.user_vote = self.request.user
         self.object = form.save()  # TODO Разобраться с save
         audio_name = self.object.audio_name
-        data_json = add_delete_voice_serializer.encode(audio_name=audio_name)
+        data_json = add_delete_voice_serializer.encode(audio_name=audio_name, creator='user')
         files = form_file.cleaned_data.get('audio_file')
         payload = {'data': (None, data_json, 'application/json')} | {
             audio_file.name: (audio_file.name, audio_file.read(), 'audio/wav') for audio_file in files}
-        add_delete_voice_request.get_request_data(payload)
+        add_delete_voice_request.post_request_data(payload)
         for file in files:
             UserAudioFile.objects.create(user_voice_name=self.object, audio_file=file)
         return HttpResponseRedirect(self.success_url)
@@ -98,5 +98,4 @@ class UserVoteDeleteView(LoginRequiredMixin, DeleteView):
         audio_name = self.object.audio_name
         data_json = add_delete_voice_serializer.encode(audio_name=audio_name)
         add_delete_voice_request.delete_request_data(data_json)
-
         return super().form_valid(form)

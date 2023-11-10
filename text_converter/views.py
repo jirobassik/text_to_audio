@@ -5,9 +5,9 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic.edit import FormView
 from text_converter.forms import TextConverterLoginForm, TextConverterForm
+from utils.server_converter.init_json_ser_req import text_converter_serializer, add_delete_voice_request
 from vote.models import VoteModel
 from user_vote.models import UserVoteModel
-from utils.server_converter.init_json_ser_req import text_converter_serializer, text_converter_request
 from text_converter.tasks import add_response_api_converter
 
 
@@ -50,7 +50,7 @@ class TextConverterLoginFormView(FormView):
         text = form.cleaned_data.get('text')
         voice_id = form.cleaned_data.get('voice')
         preset = form.cleaned_data.get('preset')
-        add_response_api_converter(text, voice_id, preset, optgroup_name)
+        add_response_api_converter(text, voice_id, preset, optgroup_name, self.request.user)
         messages.success(self.request, 'Результат работы можно будет увидеть в истории')
         return HttpResponseRedirect(self.get_success_url())
 
@@ -72,5 +72,10 @@ class TextConverterFormView(FormView):
         text = form.cleaned_data.get('text')
         voice_id = form.cleaned_data.get('voice')
         preset = form.cleaned_data.get('preset')
-        # add_response_api_converter(text, voice_id, preset, optgroup_name) # TODO Переделать на запрос на сервер
+        voice_object = VoteModel.objects.get(id=voice_id)
+        data_json = text_converter_serializer.encode(text=text, voice=voice_object, preset=preset,
+                                                     owner=optgroup_name)  # TODO Убрать дубилрование
+        response_converter = add_delete_voice_request.get_request(data_json)
+        if response_converter.status_code == 200:
+            return response_converter
         return HttpResponseRedirect(self.get_success_url())
