@@ -31,3 +31,28 @@ class RegistrationForm(forms.ModelForm):
             self.add_error('username',
                            forms.ValidationError('Неправильное сочетание имени пользователя, пароля и почты'))
         return cd
+
+
+class EditForm(forms.ModelForm):
+    email = forms.EmailField(required=True, label='Почта')
+
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'email']
+
+    def clean_email(self):
+        current_user = self.instance
+        cd = self.cleaned_data['email']
+        if User.objects.filter(email=cd).exclude(id=current_user.id).exists() and not self.has_error('username'):
+            self.add_error('username',
+                           forms.ValidationError('Неправильное сочетание имени пользователя, пароля и почты'))
+        return cd
+
+    def clean_username(self):
+        current_user = self.instance
+        cd = self.cleaned_data['username']
+        if User.objects.filter(username=cd).exclude(id=current_user.id).exists():
+            print(cd)
+            self.add_error('username',
+                           forms.ValidationError('Неправильное сочетание имени пользователя, пароля и почты'))
+        return cd

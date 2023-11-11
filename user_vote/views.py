@@ -96,6 +96,6 @@ class UserVoteDeleteView(LoginRequiredMixin, DeleteView):
 
     def form_valid(self, form):
         audio_name = self.object.audio_name
-        data_json = add_delete_voice_serializer.encode(audio_name=audio_name)
+        data_json = add_delete_voice_serializer.encode(audio_name=audio_name, creator='user')
         add_delete_voice_request.delete_request_data(data_json)
         return super().form_valid(form)

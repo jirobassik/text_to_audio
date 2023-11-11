@@ -1,0 +1,64 @@
+.text-converter-form {
+    text-align: left;
+}
+
+.text-converter-form {
+    width: 400px;
+    margin: 20px auto 0;
+}
+
+.text-converter-form form {
+    background-color: #f2f2f2;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.text-converter-form input[type="text"],
+.text-converter-form input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.text-converter-form input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.text-converter-form input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+.text-converter-form p {
+    margin-top: 10px;
+}
+
+.register-prompt {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.register-prompt a {
+    color: #4CAF50;
+    text-decoration: none;
+}
+
+.register-prompt a:hover {
+    text-decoration: none;
+    color: grey;
+}
+
+.errorlist {
+    list-style: none;
+    margin-right: 30px;
+}
