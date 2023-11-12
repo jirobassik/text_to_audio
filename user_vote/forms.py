@@ -4,7 +4,6 @@ from taggit.models import Tag
 
 from .models import UserVoteModel, UserAudioFile
 
-
 class MultipleFileInput(forms.ClearableFileInput):
     allow_multiple_selected = True
 
@@ -24,7 +23,8 @@ class MultipleFileField(forms.FileField):
 
 
 class FileFieldForm(forms.ModelForm):
-    audio_file = MultipleFileField(label='Аудио файлы')
+    audio_file = MultipleFileField(label='Аудио файлы',
+                                   help_text='Файлы формата .wav размера не более 2 мб')
 
     class Meta:
         model = UserAudioFile

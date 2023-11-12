@@ -2,9 +2,14 @@ from django.contrib import admin
 from .models import VoteModel, AudioFileModel
 from history.admin import HistoryModelInline
 
+
+class StackedInLineFileAdmin(admin.StackedInline):  # TODO Почитать про Stackedinline, genericinline
+    model = AudioFileModel
+
+
 @admin.register(VoteModel)
 class VoteAdmin(admin.ModelAdmin):
-    inlines = [HistoryModelInline]
+    inlines = [StackedInLineFileAdmin, HistoryModelInline]
     list_display = ['audio_name', 'tag_list']
     list_filter = ['audio_name']
     search_fields = ['audio_name']

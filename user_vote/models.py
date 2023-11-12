@@ -6,7 +6,7 @@ from django.db import models
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 from django.urls import reverse
-
+from utils.file_validation import content_validation, extension_validation, max_size_validation
 from history.models import HistoryModel
 from vote.models import CommonVoteModel
 
@@ -28,7 +28,8 @@ class UserVoteModel(CommonVoteModel):  # TODO Если нет связанных
 
 class UserAudioFile(models.Model):
     user_voice_name = models.ForeignKey(UserVoteModel, on_delete=models.CASCADE, verbose_name='Принадлежит голосу')
-    audio_file = models.FileField('Путь к аудио', upload_to='user_vote_media')
+    audio_file = models.FileField('Путь к аудио', upload_to='user_vote_media',
+                                  validators=[extension_validation, content_validation, max_size_validation])
 
     def __str__(self):
         return self.audio_file.name

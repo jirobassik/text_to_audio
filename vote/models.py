@@ -8,6 +8,7 @@ from django.dispatch import receiver
 from django.urls import reverse
 from taggit.managers import TaggableManager
 from history.models import HistoryModel
+from utils.file_validation import extension_validation, content_validation, max_size_validation
 
 
 class CommonVoteModel(models.Model):
@@ -34,7 +35,8 @@ class VoteModel(CommonVoteModel):
 
 class AudioFileModel(models.Model):
     voice_name = models.ForeignKey(VoteModel, on_delete=models.CASCADE, verbose_name='Принадлежит голосу')
-    audio_file = models.FileField('Путь к аудио', upload_to='vote_media')
+    audio_file = models.FileField('Путь к аудио', upload_to='vote_media',
+                                  validators=[extension_validation, content_validation, max_size_validation])
 
     def __str__(self):
         return self.audio_file.name

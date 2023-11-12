@@ -5,9 +5,12 @@ from history.admin import HistoryModelInline
 from user_vote.models import UserVoteModel, UserAudioFile
 
 
+class StackedInLineUserFileAdmin(admin.StackedInline):
+    model = UserAudioFile
+
 @admin.register(UserVoteModel)
 class UserVoteAdmin(admin.ModelAdmin):
-    inlines = [HistoryModelInline]
+    inlines = [StackedInLineUserFileAdmin, HistoryModelInline]
     list_display = ['audio_name', 'user_vote_link', 'tag_list']
     list_filter = ['audio_name', 'user_vote']
     search_fields = ['audio_name', 'user_vote']

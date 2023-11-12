@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -20,7 +21,7 @@ def register(request):
     return render(request, 'user_profile/register.html', {'user_form': form})
 
 
-class UpdateViewProfile(UpdateView):
+class UpdateViewProfile(LoginRequiredMixin, UpdateView):
     model = User
     form_class = EditForm
     template_name = 'user_profile/edit_profile.html'

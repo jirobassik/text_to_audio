@@ -51,7 +51,12 @@ class CreateVoteView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(CreateVoteView, self).get_context_data(**kwargs)
-        context['form_file'] = UserVoteInlineFormat()
+        context['form_file'] = UserVoteInlineFormat
+        return context
+
+    def custom_context(self, **kwargs):
+        context = super(CreateVoteView, self).get_context_data(**kwargs)
+        context['form_file'] = kwargs.get('form_file')
         return context
 
     def post(self, request, *args, **kwargs):
@@ -65,9 +70,9 @@ class CreateVoteView(LoginRequiredMixin, CreateView):
     @override(check_signature=False)
     def form_invalid(self, form, form_file):
         return self.render_to_response(
-            self.get_context_data(form=form,
-                                  form_file=form_file
-                                  )
+            self.custom_context(form=form,
+                                form_file=form_file
+                                )
         )
 
     @override(check_signature=False)
