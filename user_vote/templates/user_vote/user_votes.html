@@ -8,7 +8,8 @@
 
         <div class="file-cards">
             <div class="file-card plus-card">
-                <a href="{% url 'vote-create-user' %}"><i class="bi bi-plus-circle-dotted" style="font-size: 5rem; color: gray"></i></a>
+                <a href="{% url 'vote-create-user' %}"><i class="bi bi-plus-circle-dotted"
+                                                          style="font-size: 5rem; color: gray"></i></a>
             </div>
             {% for audio in user_vote %}
                 <div class="file-card" id="{{ audio.id }}">
@@ -28,9 +29,14 @@
             {% endfor %}
         </div>
     {% else %}
-        <p>Вы ещё не добавили свой голос, вы можете сделать это нажав <a href="{% url 'vote-create-user' %}">добавить
-            свой
-            голос</a></p>
+        <p class="add-message">Вы ещё не добавили свой голос, вы можете <br> сделать это нажав на карточку ниже или <a
+                href="{% url 'vote-create-user' %}" class="add-link"> сюда </a></p>
+        <div class="file-cards">
+            <div class="file-card plus-card">
+                <a href="{% url 'vote-create-user' %}"><i class="bi bi-plus-circle-dotted"
+                                                          style="font-size: 5rem; color: gray"></i></a>
+            </div>
+        </div>
     {% endif %}
 
     <script>

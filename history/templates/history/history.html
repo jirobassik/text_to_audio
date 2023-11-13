@@ -5,37 +5,8 @@
 {% block style2 %}{% static 'history/css/history.css' %}{% endblock %}
 {% block content_main %}
     <h1>История</h1>
-    <form id="search-form">
-        <label for="input_query"></label>
-        <input type="text" name="input_query" id="input_query" placeholder="Введите ваш запрос">
-
-        <label for="search_type"></label>
-        <select name="search_type" id="search_type">
-            <option value="standard">Стандартный</option>
-            <option value="ai">ИИ</option>
-        </select>
-
-        <button type="submit">Поиск</button>
-    </form>
-
-    <script>
-        document.getElementById('search-form').addEventListener('submit', function (event) {
-            event.preventDefault();
-            var searchType = document.getElementById('search_type').value;
-            var query = document.getElementById('input_query').value;
-            var actionUrl = '';
-
-            if (searchType === 'standard') {
-                actionUrl = '{% url "history-search" %}';
-            } else if (searchType === 'ai') {
-                actionUrl = '{% url "history-ai-search" %}';
-            }
-
-            this.action = actionUrl;
-            this.submit();
-        });
-    </script>
     {% if history_entries %}
+        {% include 'history/history_search_form.html' %}
         <table>
             <thead>
             <tr>
@@ -76,6 +47,7 @@
             });
         </script>
     {% elif search %}
+        {% include 'history/history_search_form.html' %}
         <h5>Ничего не найдено</h5>
     {% else %}
         <h5>Пока нет истории, она появится как только преобразуйте текст в голос!</h5>

@@ -6,7 +6,7 @@
     <div class="text-converter-form">
     <h1 class="text-converter-form">Создание аккаунта</h1>
         <form method="post">
-            {{ user_form.as_p }}
+            {{ form.as_p }}
             {% csrf_token %}
             <p><input type="submit" value="Создать аккаунт"></p>
         </form>

@@ -75,3 +75,20 @@
     text-align: center;
 }
 
+.add-message {
+    text-align: left;
+    color: #777;
+    font-size: 20px;
+    margin-top: 10px;
+    margin-left: 20px;
+}
+
+.add-link {
+    color: #4CAF50;
+    text-decoration: none;
+}
+
+.add-link:hover {
+    text-decoration: none;
+    color: grey;
+}
