@@ -34,7 +34,7 @@ class VoteModel(CommonVoteModel):
 
 @receiver(pre_delete, sender=VoteModel)
 def audio_pre_delete(sender, instance, **kwargs):
-    data_json = add_delete_voice_serializer.encode(audio_name=instance.audio_name, creator='user')
+    data_json = add_delete_voice_serializer.encode(audio_name=instance.audio_name)
     add_delete_voice_request_admin.delete_request_data(data_json)
 
 class AudioFileModel(models.Model):
@@ -56,7 +56,7 @@ def audio_file_pre_delete(sender, instance, **kwargs):
 @receiver(pre_save, sender=AudioFileModel)
 def audio_file_pre_save(sender, instance, **kwargs):
     audio_name, audio_file = VoteModel.objects.get(id=instance.voice_name_id).audio_name, instance.audio_file
-    data_json = add_delete_voice_serializer.encode(audio_name=audio_name, creator='user')
+    data_json = add_delete_voice_serializer.encode(audio_name=audio_name)
     payload = {'data': (None, data_json, 'application/json')} | {
         audio_file.name: (audio_file.name, audio_file.read(), 'audio/wav')}
     add_delete_voice_request_admin.post_request_data(payload)

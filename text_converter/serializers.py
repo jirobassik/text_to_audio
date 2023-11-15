@@ -10,4 +10,3 @@ class TextConverterSerializer(serializers.Serializer):
 
 class AddVoiceSerializer(serializers.Serializer):
     audio_name = serializers.CharField()
-    creator = serializers.CharField()

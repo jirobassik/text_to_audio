@@ -7,6 +7,5 @@ class TextConverterModel:
 
 
 class AddVoiceModel:
-    def __init__(self, audio_name, creator):
+    def __init__(self, audio_name):
         self.audio_name = audio_name
-        self.creator = creator

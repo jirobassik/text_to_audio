@@ -24,11 +24,17 @@ class MultipleFileField(forms.FileField):
 
 class FileFieldForm(forms.ModelForm):
     audio_file = MultipleFileField(label='Аудио файлы',
-                                   help_text='Файлы формата .wav размера не более 2 мб')
+                                   help_text='Максимум 5 файлов формата .wav, размера не более 2 мб')
 
     class Meta:
         model = UserAudioFile
         fields = ['audio_file']
+
+    def clean_audio_file(self):
+        cd = self.cleaned_data['audio_file']
+        if len(cd) > 5:
+            raise forms.ValidationError('Должно быть 5 и меньше файлов')
+        return cd
 
 
 class UserVoteForm(forms.ModelForm):
