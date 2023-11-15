@@ -8,4 +8,6 @@ text_converter_serializer = JsonSerializer(TextConverterModel, TextConverterSeri
 text_converter_request = Request.converter_model()
 
 add_delete_voice_serializer = JsonSerializer(AddVoiceModel, AddVoiceSerializer)
-add_delete_voice_request = Request.converter_model()
+
+add_delete_voice_request_user = Request.user_model()
+add_delete_voice_request_admin = Request.admin_model()

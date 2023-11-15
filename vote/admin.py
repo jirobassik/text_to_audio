@@ -3,7 +3,7 @@ from .models import VoteModel, AudioFileModel
 from history.admin import HistoryModelInline
 
 
-class StackedInLineFileAdmin(admin.StackedInline):  # TODO Почитать про Stackedinline, genericinline
+class StackedInLineFileAdmin(admin.StackedInline):
     model = AudioFileModel
 
 

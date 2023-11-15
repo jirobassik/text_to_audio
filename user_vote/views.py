@@ -7,7 +7,7 @@ from taggit.models import Tag
 from overrides import override
 from user_vote.forms import UserVoteForm, UserVoteInlineFormat
 from user_vote.models import UserVoteModel, UserAudioFile
-from utils.server_converter.init_json_ser_req import add_delete_voice_serializer, add_delete_voice_request
+from utils.server_converter.init_json_ser_req import add_delete_voice_serializer, add_delete_voice_request_user
 
 
 class UserVoteView(LoginRequiredMixin, ListView):
@@ -84,7 +84,7 @@ class CreateVoteView(LoginRequiredMixin, CreateView):
         files = form_file.cleaned_data.get('audio_file')
         payload = {'data': (None, data_json, 'application/json')} | {
             audio_file.name: (audio_file.name, audio_file.read(), 'audio/wav') for audio_file in files}
-        add_delete_voice_request.post_request_data(payload)
+        add_delete_voice_request_user.post_request_data(payload)
         for file in files:
             UserAudioFile.objects.create(user_voice_name=self.object, audio_file=file)
         return HttpResponseRedirect(self.success_url)
@@ -102,5 +102,5 @@ class UserVoteDeleteView(LoginRequiredMixin, DeleteView):
     def form_valid(self, form):
         audio_name = self.object.audio_name
         data_json = add_delete_voice_serializer.encode(audio_name=audio_name, creator='user')
-        add_delete_voice_request.delete_request_data(data_json)
+        add_delete_voice_request_user.delete_request_data(data_json)
         return super().form_valid(form)
