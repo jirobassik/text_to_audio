@@ -1,6 +1,6 @@
 {% extends 'layout_audio.html' %}
 {% load static %}
-{#{% load tot_custom_tag %}#}
+{% load tot_custom_tag %}
 {% block style %}{% static 'vote/css/card.css' %}{% endblock %}
 
 {% block content_main %}
@@ -16,9 +16,9 @@
                     {% endif %}
                     {% endfor %}
                 </h5>
-{#                {% get_total_usage audio.id as tot_usage %}#}
-{#                <h6>Количество использований: {{ tot_usage }}</h6>#}
-{#                <hr>#}
+                {% get_total_usage audio.id as tot_usage %}
+                <h6>Количество использований: {{ tot_usage }}</h6>
+                <hr>
                 <a href="{{ audio.get_absolute_url }}" class="audio-button">Подробнее</a>
             </div>
         {% endfor %}
