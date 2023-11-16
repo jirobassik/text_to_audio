@@ -2,7 +2,6 @@ from django.core.validators import FileExtensionValidator, MaxValueValidator
 from django import forms
 import magic
 
-# TODO Добавить валидацию на кол-во файлов
 class MultipleFileExtensionValidator(FileExtensionValidator):
 
     def __call__(self, value):
@@ -23,7 +22,9 @@ class ContentValidator(FileExtensionValidator):
             self.one_file(value)
 
     def validate_content(self, file):
-        file_mime_type = magic.from_buffer(file.read(1024), mime=True)
+        file_object = file
+        file_mime_type = magic.from_buffer(file_object.read(1024), mime=True)
+        file_object.seek(0)
         return file_mime_type in self.allowed_extensions
 
     def many_files(self, files):

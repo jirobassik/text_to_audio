@@ -28,8 +28,8 @@ class TextConverterLoginFormView(FormView):
         kwargs = super().get_form_kwargs()
         queryset_rel_file_vote_model = VoteModel.objects.annotate(num_related=Count('audiofilemodel')).filter(
             num_related__gt=0)
-        queryset_rel_file_user_vote_model = UserVoteModel.objects.annotate(num_related=Count('useraudiofile')).filter(
-            num_related__gt=0)
+        queryset_rel_file_user_vote_model = UserVoteModel.objects.access_user(self.request.user).annotate(
+            num_related=Count('useraudiofile')).filter(num_related__gt=0)
         kwargs['votes'] = queryset_rel_file_vote_model.values('id', 'audio_name')
         kwargs['user_votes'] = queryset_rel_file_user_vote_model.values('id', 'audio_name')
         return kwargs

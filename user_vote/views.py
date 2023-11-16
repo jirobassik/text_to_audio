@@ -1,13 +1,18 @@
+import logging
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from requests.exceptions import SSLError, ConnectionError
 from taggit.models import Tag
 from overrides import override
 from user_vote.forms import UserVoteForm, UserVoteInlineFormat
 from user_vote.models import UserVoteModel, UserAudioFile
-from utils.server_converter.init_json_ser_req import add_delete_voice_serializer, add_delete_voice_request_user
+from utils.server_converter.send import send_voice, del_voice
+from utils.server_converter.init_json_ser_req import add_delete_voice_request_user
+from utils.server_converter.server_error import SendError
 
 
 class UserVoteView(LoginRequiredMixin, ListView):
@@ -77,16 +82,17 @@ class CreateVoteView(LoginRequiredMixin, CreateView):
 
     @override(check_signature=False)
     def form_valid(self, form, form_file):
-        form.instance.user_vote = self.request.user
-        self.object = form.save()  # TODO Разобраться с save
-        audio_name = self.object.audio_name
-        data_json = add_delete_voice_serializer.encode(audio_name=audio_name)
+        audio_name = form.cleaned_data.get('audio_name')
         files = form_file.cleaned_data.get('audio_file')
-        payload = {'data': (None, data_json, 'application/json')} | {
-            audio_file.name: (audio_file.name, audio_file.read(), 'audio/wav') for audio_file in files}
-        add_delete_voice_request_user.post_request_data(payload)
-        for file in files:
-            UserAudioFile.objects.create(user_voice_name=self.object, audio_file=file)
+        try:
+            send_voice(files, audio_name, add_delete_voice_request_user)
+            form.instance.user_vote = self.request.user
+            self.object = form.save()  # TODO Разобраться с save
+            for file in files:
+                UserAudioFile.objects.create(user_voice_name=self.object, audio_file=file)
+        except (SSLError, ConnectionError, SendError) as e:
+            messages.error(self.request, 'Что-то пошло не так, попробуйте позже')
+            logging.error(e)
         return HttpResponseRedirect(self.success_url)
 
 
@@ -101,6 +107,10 @@ class UserVoteDeleteView(LoginRequiredMixin, DeleteView):
 
     def form_valid(self, form):
         audio_name = self.object.audio_name
-        data_json = add_delete_voice_serializer.encode(audio_name=audio_name)
-        add_delete_voice_request_user.delete_request_data(data_json)
-        return super().form_valid(form)
+        try:
+            del_voice(audio_name, add_delete_voice_request_user)
+            return super().form_valid(form)
+        except (SSLError, ConnectionError, SendError) as e:
+            messages.error(self.request, 'Что-то пошло не так, попробуйте позже')
+            logging.error(e)
+            return HttpResponseRedirect(self.success_url)

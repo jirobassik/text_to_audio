@@ -14,7 +14,7 @@ class TextConverterLoginForm(forms.Form):
         user_votes = kwargs.pop('user_votes', [])
         super(TextConverterLoginForm, self).__init__(*args, **kwargs)
         self.fields['voice'].choices = self.get_choices(votes, user_votes)
-
+    # TODO Если нет голосов то
     @staticmethod
     def get_choices(votes, user_votes):
         choices = [('Стандартные голоса', [(vote.get('id'), vote.get('audio_name')) for vote in votes]),

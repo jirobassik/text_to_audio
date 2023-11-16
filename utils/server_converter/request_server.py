@@ -24,11 +24,11 @@ class Request:
 
     def post_request_data(self, data):
         return requests.post(f'{self.server_name + self.model_name}/',
-                             files=data, ).content
+                             files=data, )
 
     def delete_request_data(self, data):
-        requests.delete(f'{self.server_name + self.model_name}/', data=data,
-                        headers={'Content-Type': 'application/json'})
+        return requests.delete(f'{self.server_name + self.model_name}/', data=data,
+                               headers={'Content-Type': 'application/json'})
 
     @property
     def model_name(self):
