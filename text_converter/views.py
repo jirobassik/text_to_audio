@@ -1,18 +1,23 @@
+import logging
+
 from django.contrib import messages
 from django.db.models import Count
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic.edit import FormView
+from requests.exceptions import SSLError, ConnectionError
+
 from text_converter.forms import TextConverterLoginForm, TextConverterForm
-from utils.server_converter.init_json_ser_req import text_converter_serializer, text_converter_request
+from utils.server_converter.send import send_converter
+from utils.server_converter.server_error import SendError
 from vote.models import VoteModel
 from user_vote.models import UserVoteModel
 from text_converter.tasks import add_response_api_converter
 
 
 class TextConverterView(View):
-    def dispatch(self, request, *args, **kwargs):  # TODO Почитать про диспатч
+    def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             return TextConverterLoginFormView.as_view()(request, *args, **kwargs)
         else:
@@ -73,9 +78,10 @@ class TextConverterFormView(FormView):
         voice_id = form.cleaned_data.get('voice')
         preset = form.cleaned_data.get('preset')
         voice_object = VoteModel.objects.get(id=voice_id)
-        data_json = text_converter_serializer.encode(text=text, voice=voice_object, preset=preset,
-                                                     owner=optgroup_name)  # TODO Убрать дубилрование
-        response_converter = text_converter_request.get_request(data_json)
-        if response_converter.status_code == 200:
+        try:
+            response_converter = send_converter(text, voice_object, preset, optgroup_name)
             return response_converter
+        except (SSLError, ConnectionError, SendError) as e:
+            messages.error(self.request, 'Что-то пошло не так, попробуйте позже')
+            logging.error(e)
         return HttpResponseRedirect(self.get_success_url())

@@ -9,9 +9,11 @@ from django.dispatch import receiver
 from django.urls import reverse
 from django.contrib.auth.models import User
 
+
 class HistoryUserManager(models.Manager):
     def history_user_access(self, user):
         return super().get_queryset().filter(user=user)
+
 
 class HistoryModel(models.Model):
     text = models.CharField('Озвученный текст', max_length=400, null=False, blank=False)
@@ -41,7 +43,6 @@ class HistoryModel(models.Model):
         return self.text
 
 
-# TODO Разобраться с сигналами
 @receiver(pre_delete, sender=HistoryModel)
 def history_pre_delete(sender, instance, **kwargs):
     file_name = instance.audio_file.name

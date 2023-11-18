@@ -87,7 +87,7 @@ class CreateVoteView(LoginRequiredMixin, CreateView):
         try:
             send_voice(files, audio_name, add_delete_voice_request_user)
             form.instance.user_vote = self.request.user
-            self.object = form.save()  # TODO Разобраться с save
+            self.object = form.save()
             for file in files:
                 UserAudioFile.objects.create(user_voice_name=self.object, audio_file=file)
         except (SSLError, ConnectionError, SendError) as e:
