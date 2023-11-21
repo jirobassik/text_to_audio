@@ -1,8 +1,10 @@
+from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.contrib.postgres.search import SearchVector
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.utils import ProgrammingError
 from .models import HistoryModel
 from utils.vanna_util.vanna_run import vanna_get_queryset
 
@@ -48,7 +50,32 @@ class HistoryAiSearchView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         query = self.request.GET.get('input_query', '')
-        return vanna_get_queryset(self, query)
+        key = (str(self.request.user.id) + query).replace(' ', '')
+        if sql_val := self.request.session.get(key, False):
+            return self.model.objects.history_user_access(self.request.user).raw(sql_val)
+        else:
+            if (vanna_sql := vanna_get_queryset(query)) and (query_set := self.try_raw_queryset(vanna_sql)):
+                self.request.session[key] = vanna_sql
+                return query_set
+            else:
+                return self.error_view()
+
+    def try_raw_queryset(self, raw_query):
+        try:
+            query_set = self.model.objects.history_user_access(self.request.user).raw(raw_query)
+            if query_set:
+                pass
+            return query_set
+        except (IndexError, ProgrammingError):
+            return False
+
+    def error_view(self):
+        self.template_name = 'history/history.html'
+        self.context_object_name = 'history_entries'
+        query_set = self.model.objects.history_user_access(self.request.user)
+        messages.error(self.request, 'Интеллектуальный поиск не работает, попробуйте '
+                                     'вести другой запрос или свяжитесь с администратором')
+        return query_set
 
 
 class HistorySearchView(LoginRequiredMixin, ListView):

@@ -1,9 +1,9 @@
-from django.contrib import messages
-from vanna.exceptions import ConnectionError, ValidationError
+import requests.exceptions as req_exc
+import vanna.exceptions as van_exc
 from utils.vanna_util.vanna_use import VannaUse
 
 
-def vanna_get_queryset(self, query):
+def vanna_get_queryset(query):
     def replace_percent(query_string: str) -> str:
         return query_string.replace('%', '%%')
 
@@ -15,14 +15,6 @@ def vanna_get_queryset(self, query):
     try:
         vanna_ = VannaUse()
         vanna_raw_query = replace_percent(add_id(vanna_.text_to_sql(query)))
-        query_set = self.model.objects.history_user_access(self.request.user).raw(vanna_raw_query)
-        if query_set:
-            pass
-        return query_set
-    except (ConnectionError, ValidationError, IndexError):
-        self.template_name = 'history/history.html'
-        self.context_object_name = 'history_entries'
-        query_set = self.model.objects.history_user_access(self.request.user)
-        messages.error(self.request, 'Интеллектуальный поиск не работает, попробуйте '
-                                     'вести другой запрос или свяжитесь с администратором')
-        return query_set
+        return vanna_raw_query
+    except (van_exc.ConnectionError, van_exc.ValidationError, req_exc.ConnectionError):
+        return False
