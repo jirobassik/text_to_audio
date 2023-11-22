@@ -1,6 +1,4 @@
 from django.contrib import messages
-from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.contrib.postgres.search import SearchVector
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -26,16 +24,6 @@ class HistoryDetailView(LoginRequiredMixin, DetailView):
     def get_object(self, queryset=None):
         queryset = self.model.objects.history_user_access(self.request.user)
         return super().get_object(queryset)
-
-
-def play_audio(request, audio_id):
-    audio = get_object_or_404(HistoryModel, id=audio_id)
-    audio_file = audio.audio_file.path
-
-    with open(audio_file, 'rb') as file:
-        response = HttpResponse(file.read(), content_type='audio/mpeg')
-        response['Content-Disposition'] = 'inline; filename=' + audio.audio_file.name
-        return response
 
 
 class HistoryAiSearchView(LoginRequiredMixin, ListView):
