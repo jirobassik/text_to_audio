@@ -23,3 +23,8 @@ def get_column_data(column_name: str, ai_entry):
 @register.simple_tag
 def get_columns(raw_query_set):
     return [column for column in raw_query_set.columns if column != 'id']
+
+@register.simple_tag
+def filter_user(his_ai_data, req_user):
+    return [his_el for his_el in his_ai_data if his_el.user_id == req_user]
+

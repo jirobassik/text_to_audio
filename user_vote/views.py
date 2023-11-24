@@ -50,10 +50,6 @@ class CreateVoteView(LoginRequiredMixin, CreateView):
     template_name = 'user_vote/vote_form.html'
     success_url = reverse_lazy('vote-view-user')
 
-    def __init__(self, **kwargs):
-        super().__init__()
-        self.object = None
-
     def get_context_data(self, **kwargs):
         context = super(CreateVoteView, self).get_context_data(**kwargs)
         context['form_file'] = UserVoteInlineFormat
@@ -87,8 +83,8 @@ class CreateVoteView(LoginRequiredMixin, CreateView):
         try:
             send_voice(files, audio_name, add_delete_voice_request_user)
             form.instance.user_vote = self.request.user
-            self.object = form.save()
-            user_audio_file_obj = [UserAudioFile(user_voice_name=self.object, audio_file=file) for file in files]
+            object_form = form.save()
+            user_audio_file_obj = [UserAudioFile(user_voice_name=object_form, audio_file=file) for file in files]
             UserAudioFile.objects.bulk_create(user_audio_file_obj)
         except (SSLError, ConnectionError, SendError) as e:
             messages.error(self.request, 'Что-то пошло не так, попробуйте позже')

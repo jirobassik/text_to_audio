@@ -1,3 +1,4 @@
+import logging
 from django.contrib import messages
 from django.views.generic import ListView, DetailView
 from django.contrib.postgres.search import SearchVector
@@ -54,7 +55,8 @@ class HistoryAiSearchView(LoginRequiredMixin, ListView):
             if query_set:
                 pass
             return query_set
-        except (IndexError, ProgrammingError):
+        except (IndexError, ProgrammingError) as e:
+            logging.error(f'Check queryset error {e}')
             return False
 
     def error_view(self):

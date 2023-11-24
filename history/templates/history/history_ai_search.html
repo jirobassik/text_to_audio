@@ -5,7 +5,8 @@
 {% block style2 %}{% static 'history/css/history.css' %}{% endblock %}
 {% block content_main %}
     <h1>История</h1>
-    {% if history_ai_entries %}
+    {% filter_user history_ai_entries request.user.id as filter_history_ai_entries %}
+    {% if filter_history_ai_entries %}
         {% include 'history/history_search_form.html' %}
         {% get_columns history_ai_entries as columns %}
         <table>
@@ -19,7 +20,7 @@
             </tr>
             </thead>
             <tbody>
-            {% for ai_entry in history_ai_entries %}
+            {% for ai_entry in filter_history_ai_entries %}
                 <tr>
                     {% for column in columns %}
                         {% if column != "object_id" and column != "user_id" %}
