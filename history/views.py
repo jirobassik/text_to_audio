@@ -41,7 +41,7 @@ class HistoryAiSearchView(LoginRequiredMixin, ListView):
         query = self.request.GET.get('input_query', '')
         key = (str(self.request.user.id) + query).replace(' ', '')
         if sql_val := self.request.session.get(key, False):
-            return self.model.objects.history_user_access(self.request.user).raw(sql_val)
+            return self.model.objects.raw(sql_val)
         else:
             if (vanna_sql := vanna_get_queryset(query)) and (query_set := self.try_raw_queryset(vanna_sql)):
                 self.request.session[key] = vanna_sql
@@ -51,7 +51,7 @@ class HistoryAiSearchView(LoginRequiredMixin, ListView):
 
     def try_raw_queryset(self, raw_query):
         try:
-            query_set = self.model.objects.history_user_access(self.request.user).raw(raw_query)
+            query_set = self.model.objects.raw(raw_query)
             if query_set:
                 pass
             return query_set
