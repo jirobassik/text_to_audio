@@ -52,7 +52,6 @@ class EditForm(forms.ModelForm):
         current_user = self.instance
         cd = self.cleaned_data['username']
         if User.objects.filter(username=cd).exclude(id=current_user.id).exists():
-            print(cd)
             self.add_error('username',
                            forms.ValidationError('Неправильное сочетание имени пользователя, пароля и почты'))
         return cd
