@@ -56,7 +56,8 @@ class TextConverterLoginFormView(FormView):
         voice_id = form.cleaned_data.get('voice')
         preset = form.cleaned_data.get('preset')
         add_response_api_converter(text, voice_id, preset, optgroup_name, self.request.user)
-        messages.success(self.request, 'Результат работы можно будет увидеть в истории')
+        messages.success(self.request, 'Результат работы можно будет увидеть в истории, а отслеживать работы можно'
+                                       'на странице \'Статус\'')
         return HttpResponseRedirect(self.get_success_url())
 
 
