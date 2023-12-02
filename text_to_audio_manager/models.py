@@ -13,7 +13,7 @@ class TaskAudioManagerModel(models.Model):
     is_deleted = models.BooleanField(verbose_name='Удалено', default=False)
 
     class Meta:
-        ordering = ['time_add']
+        ordering = ['-time_add']
         indexes = [
             models.Index(fields=('task_id', 'time_add'))
         ]

@@ -100,7 +100,7 @@ REDIS_DB = 0
 
 
 HUEY = {
-    'huey_class': 'huey.RedisHuey',  # Huey implementation to use.
+    'huey_class': 'huey.PriorityRedisHuey',  # Huey implementation to use.
     'name': settings.DATABASES['default']['NAME'],  # Use db name for huey.
     'results': True,  # Store return values of tasks.
     'store_none': False,  # If a task returns None, do not save to results.
