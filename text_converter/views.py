@@ -70,9 +70,11 @@ class TextConverterLoginFormView(FormView):
 
     def start_convert(self, text, voice_id, preset, optgroup_name):
         user = self.request.user
-        task_id = add_response_api_converter(text, voice_id, preset, optgroup_name, user).task.id
+        task_model = TaskAudioManagerModel.objects.create(task_id='Не задан', text=text,
+                                                          status='В очереди', rel_user=user)
+        task_pk = task_model.pk
+        task_id = add_response_api_converter(text, voice_id, preset, optgroup_name, task_pk, user).task.id
         r.sadd(f'executing-tasks:user:{user}', task_id)
-        TaskAudioManagerModel.objects.create(task_id=task_id, text=text, status='В очереди', rel_user=user)
 
 
 class TextConverterFormView(FormView):

@@ -19,10 +19,10 @@ def delete_audio_time():
     delete_audio_manager()
 
 
-def add_manager(task_id: str, text: str, status: str, user):
-    filter_task_id = TaskAudioManagerModel.objects.filter(task_id=task_id)
+def add_manager(task_id: str, text: str, status: str, task_pk, user):
+    filter_task_id = TaskAudioManagerModel.objects.filter(id=task_pk)
     if filter_task_id.exists():
-        filter_task_id.update(status=status)
+        filter_task_id.update(task_id=task_id, status=status)
     else:
         TaskAudioManagerModel.objects.create(task_id=task_id, text=text, status=status, rel_user=user)
 
@@ -30,6 +30,6 @@ def add_manager(task_id: str, text: str, status: str, user):
 @signal()
 def audio_signal(signal, task, exc=None):
     if task.name == 'add_response_api_converter':
-        task_text, task_user = task.args[0], task.args[-1]
-        add_manager(task.id, task_text, status_choice.get(signal, 'Нет данных'), task_user)
+        task_text, task_user, task_pk = task.args[0], task.args[-1], task.args[-2]
+        add_manager(task.id, task_text, status_choice.get(signal, 'Нет данных'), task_pk, task_user)
         change_status(signal, task_user, task)

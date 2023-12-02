@@ -3,7 +3,7 @@ from django.db import models
 
 
 class TaskAudioManagerModel(models.Model):
-    task_id = models.CharField(verbose_name='ID задачи', max_length=100, unique=True)
+    task_id = models.CharField(verbose_name='ID задачи', max_length=100, unique=False)
     rel_user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Создатель задачи')
     status = models.CharField(verbose_name='Статус задачи', max_length=100,
                               null=False, blank=False)
