@@ -1,10 +1,12 @@
+import ssl
+
 import requests
 
 
 class Request:
     def __init__(self, model_name: str):
         self.__model_name = model_name
-        self.__server_name = 'http://127.0.0.1:8001/api/v1/'
+        self.__server_name = 'http://192.168.140.99:8000/api/v1/'
 
     @classmethod
     def converter_model(cls):
@@ -20,7 +22,8 @@ class Request:
 
     def get_request(self, data):
         return requests.get(f'{self.server_name + self.model_name}/', data=data,
-                            headers={'Content-Type': 'application/json'})
+                            headers={'Content-Type': 'application/json'},
+                            verify=ssl.CERT_NONE) # Попробовать {'Connection':'Keep-Alive'}
 
     def post_request_data(self, data):
         return requests.post(f'{self.server_name + self.model_name}/',

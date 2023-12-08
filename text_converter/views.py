@@ -9,11 +9,14 @@ from django.views.generic.edit import FormView
 from requests.exceptions import SSLError, ConnectionError
 
 from text_converter.forms import TextConverterLoginForm, TextConverterForm
-from utils.server_converter.send import send_converter
+from text_to_audio_manager.models import TaskAudioManagerModel
+from utils.redis_connect import r
+from utils.server_converter.send import send_converter_anonym
 from utils.server_converter.server_error import SendError
 from vote.models import VoteModel
 from user_vote.models import UserVoteModel
 from text_converter.tasks import add_response_api_converter
+from utils.redis_oper import get_executing_count
 
 
 class TextConverterView(View):
@@ -39,6 +42,11 @@ class TextConverterLoginFormView(FormView):
         kwargs['user_votes'] = queryset_rel_file_user_vote_model.values('id', 'audio_name')
         return kwargs
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tasks'] = True if get_executing_count(self.request.user) else False
+        return context
+
     @staticmethod
     def _get_optgroup_name(form):
         voice_choices = form.fields['voice'].choices
@@ -55,9 +63,18 @@ class TextConverterLoginFormView(FormView):
         text = form.cleaned_data.get('text')
         voice_id = form.cleaned_data.get('voice')
         preset = form.cleaned_data.get('preset')
-        add_response_api_converter(text, voice_id, preset, optgroup_name, self.request.user)
-        messages.success(self.request, 'Результат работы можно будет увидеть в истории')
+        self.start_convert(text, voice_id, preset, optgroup_name)
+        messages.success(self.request, 'Результат работы можно будет увидеть в \'Истории\', а отслеживать обработку '
+                                       'можно на странице \'Статус\'')
         return HttpResponseRedirect(self.get_success_url())
+
+    def start_convert(self, text, voice_id, preset, optgroup_name):
+        user = self.request.user
+        task_model = TaskAudioManagerModel.objects.create(task_id='Не задан', text=text,
+                                                          status='В очереди', rel_user=user)
+        task_pk = task_model.pk
+        task_id = add_response_api_converter(text, voice_id, preset, optgroup_name, task_pk, user).task.id
+        r.sadd(f'executing-tasks:user:{user}', task_id)
 
 
 class TextConverterFormView(FormView):
@@ -79,7 +96,7 @@ class TextConverterFormView(FormView):
         preset = form.cleaned_data.get('preset')
         voice_object = VoteModel.objects.get(id=voice_id)
         try:
-            response_converter = send_converter(text, voice_object, preset, optgroup_name)
+            response_converter = send_converter_anonym(text, voice_object, preset, optgroup_name)
             return response_converter
         except (SSLError, ConnectionError, SendError) as e:
             messages.error(self.request, 'Что-то пошло не так, попробуйте позже')

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'history',
     'user_profile',
     'user_vote',
+    'text_to_audio_manager',
     'rest_framework',
     'huey.contrib.djhuey',
 ]
@@ -99,11 +100,11 @@ REDIS_DB = 0
 
 
 HUEY = {
-    'huey_class': 'huey.RedisHuey',  # Huey implementation to use.
+    'huey_class': 'huey.PriorityRedisHuey',  # Huey implementation to use.
     'name': settings.DATABASES['default']['NAME'],  # Use db name for huey.
     'results': True,  # Store return values of tasks.
     'store_none': False,  # If a task returns None, do not save to results.
-    'immediate': True,  # If DEBUG=True, run synchronously.
+    'immediate': False,  # If DEBUG=True, run synchronously.
     'utc': True,  # Use UTC for all times internally.
     'blocking': True,  # Perform blocking pop rather than poll Redis.
     'connection': {

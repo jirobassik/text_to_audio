@@ -1,21 +1,11 @@
-from django.core.files.base import ContentFile
 from huey.contrib.djhuey import db_task
-from history.models import HistoryModel
 from user_vote.models import UserVoteModel
-from utils.redis_connect import r
-from utils.server_converter.init_json_ser_req import text_converter_serializer, text_converter_request
 from vote.models import VoteModel
+from utils.server_converter.send import send_converter_register
 
 
-@db_task()
-def add_response_api_converter(text: str, voice_id: int, preset: str, owner: str, user):
+@db_task(priority=50)
+def add_response_api_converter(text: str, voice_id: int, preset: str, owner: str, pk, user):
     voice_object = VoteModel.objects.get(id=voice_id) if owner == 'standart_v' \
         else UserVoteModel.objects.get(id=voice_id)
-    data_json = text_converter_serializer.encode(text=text, voice=voice_object, preset=preset, owner=owner)
-    response_converter = text_converter_request.get_request(data_json)
-    if response_converter.status_code == 200:
-        byte_object_file = response_converter.content
-        file = ContentFile(byte_object_file, 'gen_result.wav')
-        HistoryModel(text=text, audio_file=file, content_object=voice_object, user=user).save()
-        if owner == 'standart_v':
-            r.incr(f'voice:{voice_id}:object')
+    send_converter_register(text, voice_object, preset, owner, user, voice_id)

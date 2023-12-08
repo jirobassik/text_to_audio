@@ -13,6 +13,11 @@ class HistoryView(LoginRequiredMixin, ListView):
     context_object_name = 'history_entries'
     template_name = 'history/history.html'
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_query'] = ''
+        return context
+
     def get_queryset(self):
         return self.model.objects.history_user_access(self.request.user)
 
@@ -35,10 +40,13 @@ class HistoryAiSearchView(LoginRequiredMixin, ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['search'] = True
+        context['search_query'] = self.request.session.get(
+            f'user_ai_query:{self.request.user.id}', '')
         return context
 
     def get_queryset(self):
         query = self.request.GET.get('input_query', '')
+        self.request.session[f'user_ai_query:{self.request.user.id}'] = query
         key = (str(self.request.user.id) + query).replace(' ', '')
         if sql_val := self.request.session.get(key, False):
             return self.model.objects.raw(sql_val)
@@ -76,10 +84,13 @@ class HistorySearchView(LoginRequiredMixin, ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['search'] = True
+        context['search_query'] = self.request.session.get(
+            f'user_standart_query:{self.request.user.id}', '')
         return context
 
     def get_queryset(self):
         query = self.request.GET.get('input_query', '')
+        self.request.session[f'user_standart_query:{self.request.user.id}'] = query
         filter_query = self.model.objects.history_user_access(self.request.user).annotate(
             search=SearchVector('text', 'vote_mod__audio_name', 'user_vote_mod__audio_name')).filter(search=query)
         return filter_query

@@ -6,38 +6,14 @@
 {% block content_main %}
 
     <div class="text-converter-form">
-    <h1>Текст в голос</h1>
+        <h1>Текст в голос</h1>
+        {% if tasks %}
+            <p>Выполняется обработка, пожалуйста, подождите...</p>
+        {% endif %}
         <form method="POST">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit" name="converter">Сгенерировать аудио</button>
+            <button type="submit" name="converter" {% if tasks %}disabled{% endif %}>Сгенерировать аудио</button>
         </form>
     </div>
 {% endblock %}
-
-
-{#        <label for="text-input">Введите текст:</label>#}
-{#        <textarea id="text-input" name="text" rows="4" cols="50"></textarea>#}
-{##}
-{#        <label for="voice-select">Выберите голос:</label>#}
-{#        <select id="voice-select" name="voice">#}
-{#            <optgroup label="Стандартные голоса">#}
-{#                {% for vote in votes %}#}
-{#                    <option value="{{ vote.id }}">{{ vote.audio_name }}</option>#}
-{#                {% endfor %}#}
-{#            </optgroup>#}
-{#            <optgroup label="Пользовательские голоса">#}
-{#                {% for vote in user_votes %}#}
-{#                    <option value="{{ vote.id }}">{{ vote.audio_name }}</option>#}
-{#                {% endfor %}#}
-{#            </optgroup>#}
-{#        </select>#}
-{##}
-{#        <label for="preset-select">Выберите качество:</label>#}
-{#        <select id="preset-select" name="preset">#}
-{#            <option value="ultra_fast">Ultra fast</option>#}
-{#            <option value="fast">Fast</option>#}
-{#            <option value="quality">Quality</option>#}
-{#            <option value="high_quality">High quality</option>#}
-{#        </select>#}
-{##}

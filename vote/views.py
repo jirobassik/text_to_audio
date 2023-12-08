@@ -4,7 +4,6 @@ from taggit.models import Tag
 from .models import VoteModel
 
 
-# TODO можно добавить часто используемые голоса
 class AudioView(ListView):
     model = VoteModel
     template_name = 'vote/audio.html'
