@@ -3,7 +3,7 @@ from operator import getitem
 
 
 class TextConverterForm(forms.Form):
-    text = forms.CharField(max_length=400, min_length=1, required=True, widget=forms.Textarea, initial='Привет мир',
+    text = forms.CharField(max_length=400, min_length=1, required=True, widget=forms.Textarea, initial='Hello world',
                            label='Текст')
     voice = forms.ChoiceField(choices=[], widget=forms.Select(attrs={'id': 'voice-select'}),
                               label='Голос', )

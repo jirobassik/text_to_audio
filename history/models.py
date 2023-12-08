@@ -31,9 +31,9 @@ class HistoryModel(models.Model):
     objects = HistoryUserManager()
 
     class Meta:
-        ordering = ['text']
+        ordering = ["-time_add", "text"]
         indexes = [
-            models.Index(fields=['text', "content_type", "object_id"])
+            models.Index(fields=["text", "content_type", "object_id", "time_add"])
         ]
 
     def get_absolute_url(self):
