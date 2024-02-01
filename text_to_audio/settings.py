@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'text_to_audio_manager',
     'rest_framework',
     'huey.contrib.djhuey',
+    'djangoviz',
 ]
 
 MIDDLEWARE = [
@@ -98,13 +99,12 @@ REDIS_HOST = 'localhost'
 REDIS_PORT = 6379
 REDIS_DB = 0
 
-
 HUEY = {
     'huey_class': 'huey.PriorityRedisHuey',  # Huey implementation to use.
     'name': settings.DATABASES['default']['NAME'],  # Use db name for huey.
     'results': True,  # Store return values of tasks.
     'store_none': False,  # If a task returns None, do not save to results.
-    'immediate': False,  # If DEBUG=True, run synchronously.
+    'immediate': True,  # If DEBUG=True, run synchronously.
     'utc': True,  # Use UTC for all times internally.
     'blocking': True,  # Perform blocking pop rather than poll Redis.
     'connection': {
@@ -172,7 +172,6 @@ LOGGING = {
         },
     },
 }
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/

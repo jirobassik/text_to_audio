@@ -1,8 +1,11 @@
 from utils.redis_connect import r
-
+from redis.exceptions import ConnectionError
 
 def get_executing_count(user):
-    return r.scard(f'executing-tasks:user:{user}')
+    try:
+        return r.scard(f'executing-tasks:user:{user}')
+    except ConnectionError:
+        return True
 
 
 def change_status(status, task_user, task):
