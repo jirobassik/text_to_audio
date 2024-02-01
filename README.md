@@ -10,3 +10,12 @@ After performing the voice acting, the resulting result can be downloaded in wav
 - downloading the voiced text in wav format;
 - view history, which can be used for full-text and natural language searches;
 - tracking the result of processing work.
+
+#### View the built-in list of voices
+![1](https://github.com/jirobassik/text_to_audio/assets/72316169/9128c0db-565b-4acb-a04e-7a133f7cbb27)
+
+#### View history
+![2](https://github.com/jirobassik/text_to_audio/assets/72316169/19981eb5-f484-497f-80be-bfab493463dd)
+
+#### View status
+![3](https://github.com/jirobassik/text_to_audio/assets/72316169/aa4077ee-1844-4d25-9cd9-2c4512d4d058)
