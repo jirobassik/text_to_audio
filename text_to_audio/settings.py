@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'huey.contrib.djhuey',
     'djangoviz',
-    'django_htmx'
+    'django_htmx',
+    'dbbackup',
 ]
 
 MIDDLEWARE = [
@@ -215,3 +216,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {'location': 'backup/'}
