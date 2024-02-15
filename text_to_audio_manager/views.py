@@ -9,4 +9,6 @@ class AudioManagerView(LoginRequiredMixin, ListView):
     template_name = 'text_to_audio_manager/text_to_audio_manager.html'
 
     def get_queryset(self):
+        if self.request.htmx:
+            self.template_name = 'text_to_audio_manager/status_table.html'
         return self.model.objects.filter(rel_user=self.request.user, is_deleted=False)

@@ -5,43 +5,9 @@
 {% block content_main %}
     <h1>Статус обработки</h1>
     {% if audio_manager %}
-        <table>
-            <thead>
-            <tr>
-                <th>ID задачи</th>
-                <th>Текст</th>
-                <th>Статус</th>
-                <th>Время добавления</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for entry in audio_manager %}
-                <tr>
-                    <td>{{ entry.task_id }}</td>
-                    <td class="text-d">{{ entry.text }}</td>
-                    <td>{{ entry.status }}</td>
-                    <td>{{ entry.time_add }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        <script>
-            const entryTextCells = document.querySelectorAll('.text-d');
-
-            entryTextCells.forEach((cell) => {
-                const words = cell.innerText.split(' ');
-                let wrappedText = '';
-
-                for (let i = 0; i < words.length; i++) {
-                    if (i > 0 && i % 10 === 0) {
-                        wrappedText += '<br>';
-                    }
-                    wrappedText += words[i] + ' ';
-                }
-
-                cell.innerHTML = wrappedText;
-            });
-        </script>
+        <div id="btc" hx-get="{% url 'audio-manager-view' %}" hx-trigger="every 10s" hx-swap="innerHTML">
+            {% include 'text_to_audio_manager/status_table.html' %}
+        </div>
     {% else %}
         <h5>Пока нет очереди, она появится как только преобразуйте текст в голос!</h5>
     {% endif %}

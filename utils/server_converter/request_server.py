@@ -6,7 +6,7 @@ import requests
 class Request:
     def __init__(self, model_name: str):
         self.__model_name = model_name
-        self.__server_name = 'http://192.168.140.99:8000/api/v1/'
+        self.__server_name = 'http://192.168.43.99:8000/api/v1/'
 
     @classmethod
     def converter_model(cls):
