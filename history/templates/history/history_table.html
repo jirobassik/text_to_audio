@@ -1,0 +1,39 @@
+<table>
+    <thead>
+    <tr>
+        <th>Озвученный текст (text)</th>
+        <th>Результат озвучивания (audio_file)</th>
+        <th>Используемый голос (use_vote)</th>
+        <th>Время добавления (time_add)</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for entry in history_entries %}
+        <tr>
+            <td class="entry-text">{{ entry.text }}</td>
+            <td>
+                <a href="{{ entry.get_absolute_url }}">Аудио</a>
+            </td>
+            <td>{{ entry.content_object.audio_name }}</td>
+            <td>{{ entry.time_add }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<script>
+    const entryTextCells = document.querySelectorAll('.entry-text');
+
+    entryTextCells.forEach((cell) => {
+        const words = cell.innerText.split(' ');
+        let wrappedText = '';
+
+        for (let i = 0; i < words.length; i++) {
+            if (i > 0 && i % 5 === 0) {
+                wrappedText += '<br>';
+            }
+            wrappedText += words[i] + ' ';
+        }
+
+        cell.innerHTML = wrappedText;
+    });
+</script>

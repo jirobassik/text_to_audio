@@ -12,6 +12,7 @@ class HistoryView(LoginRequiredMixin, ListView):
     model = HistoryModel
     context_object_name = 'history_entries'
     template_name = 'history/history.html'
+    paginate_by = 5
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -79,7 +80,7 @@ class HistoryAiSearchView(LoginRequiredMixin, ListView):
 class HistorySearchView(LoginRequiredMixin, ListView):
     model = HistoryModel
     context_object_name = 'history_entries'
-    template_name = 'history/history.html'
+    template_name = 'history/history_search.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)

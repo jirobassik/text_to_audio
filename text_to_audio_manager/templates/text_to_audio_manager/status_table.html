@@ -11,7 +11,7 @@
     {% for entry in audio_manager %}
         <tr>
             <td>{{ entry.task_id }}</td>
-            <td class="text-d">{{ entry.text }}</td>
+            <td>{{ entry.text|truncatewords:6}}</td>
             <td>{{ entry.status }}</td>
             <td>{{ entry.time_add }}</td>
         </tr>

@@ -69,3 +69,31 @@ a:hover {
     color: green;
 }
 
+
+
+.pagination {
+    position: fixed;
+    bottom: 20px; /* Adjust the distance from the bottom as needed */
+    left: 50%; /* Position it in the center */
+    transform: translateX(-50%);
+    background-color: white;
+    padding: 10px;
+    z-index: 1; /* Ensure it appears above the table */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.step-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.step-links a {
+    margin: 0 10px; /* Adjust the spacing between the links */
+}
+
+.current {
+    margin: 0 10px; /* Adjust the spacing around the current page indicator */
+}

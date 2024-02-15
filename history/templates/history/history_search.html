@@ -7,12 +7,9 @@
     {% if history_entries %}
         {% include 'history/history_search_form.html' %}
         {% include 'history/history_table.html' %}
-        {% include "history/history_pagination.html" with page=page_obj %}
-    {% elif search %}
+    {% else %}
         {% include 'history/history_search_form.html' %}
         <h5>Ничего не найдено</h5>
-    {% else %}
-        <h5>Пока нет истории, она появится как только преобразуйте текст в голос!</h5>
     {% endif %}
 
 {% endblock %}
