@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.core.cache import cache
 from django.views.generic import ListView, DetailView
 from taggit.models import Tag
 from .models import VoteModel
@@ -8,6 +9,13 @@ class AudioView(ListView):
     model = VoteModel
     template_name = 'vote/audio.html'
     context_object_name = 'audio_files'
+
+    def get_queryset(self):
+        subjects = cache.get('all_vote')
+        if not subjects:
+            subjects = self.model.objects.all()
+            cache.set('all_vote', subjects, 30)
+        return subjects
 
 
 class TagAudioView(ListView):
