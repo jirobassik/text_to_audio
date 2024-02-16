@@ -162,3 +162,5 @@ cython_debug/
 .idea/
 media
 backup/
+cert.crt
+cert.key

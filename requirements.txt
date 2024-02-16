@@ -1,3 +1,4 @@
+python-decouple=3.8
 amqp==5.1.1
 asgiref==3.7.2
 async-timeout==4.0.3
@@ -11,8 +12,10 @@ click-plugins==1.1.1
 click-repl==0.3.0
 colorama==0.4.6
 cryptography==41.0.7
+defusedxml==0.8.0rc2
 Django==4.2.6
 django-dbbackup==4.1.0
+django-extensions==3.2.3
 django-htmx==1.17.2
 django-taggit==4.0.0
 djangorestframework==3.14.0
@@ -23,7 +26,9 @@ huey==2.5.0
 idna==3.4
 kaleido==0.2.1
 kombu==5.3.2
+MarkupSafe==2.1.5
 numpy==1.26.0
+oauthlib==3.2.2
 overrides==7.4.0
 packaging==23.2
 pandas==2.1.1
@@ -31,14 +36,20 @@ plotly==5.17.0
 prompt-toolkit==3.0.39
 psycopg2==2.9.9
 pycparser==2.21
+PyJWT==2.8.0
 pyOpenSSL==23.3.0
 pyparsing==3.1.1
 python-dateutil==2.8.2
+python-decouple==3.8
 python-magic-bin==0.4.14
+python3-openid==3.2.0
 pytz==2023.3.post1
 redis==5.0.1
 requests==2.31.0
+requests-oauthlib==1.3.1
 six==1.16.0
+social-auth-app-django==5.4.0
+social-auth-core==4.5.3
 sqlparse==0.4.4
 tabulate==0.9.0
 tenacity==8.2.3
@@ -47,3 +58,4 @@ urllib3==2.0.6
 vanna==0.0.26
 vine==5.0.0
 wcwidth==0.2.8
+Werkzeug==3.0.1
