@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-jx5k0&^78#(qxcf-49os@zl&ryw*av(ljg1vv7c1z6ztl&d9o@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['mysite.com', 'localhost', '127.0.0.2']
 
 # Application definition
 
@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     'djangoviz',
     'django_htmx',
     'dbbackup',
+    'social_django',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [

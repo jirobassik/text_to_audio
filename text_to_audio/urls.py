@@ -21,6 +21,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
                   path('admin/', admin.site.urls),
+                  path('social-auth/',
+                       include('social_django.urls', namespace='social')),
                   path('votes/', include('vote.urls'), name='votes'),  # TODO В книге не так
                   path('user-votes/', include('user_vote.urls'), name='user-votes'),
                   path('history/', include('history.urls'), name='history'),

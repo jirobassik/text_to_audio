@@ -84,3 +84,12 @@
     list-style: none;
     margin-right: 30px;
 }
+
+.google-button {
+    font-size: 35px;
+    color: red;
+}
+
+.google-button:hover {
+    color: darkred;
+}
