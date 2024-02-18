@@ -53,6 +53,7 @@ class CreateVoteView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super(CreateVoteView, self).get_context_data(**kwargs)
         context['form_file'] = UserVoteInlineFormat
+        context['limit'] = self.check_limit()
         return context
 
     def custom_context(self, **kwargs):
@@ -67,6 +68,10 @@ class CreateVoteView(LoginRequiredMixin, CreateView):
             return self.form_valid(form, form_file)
         else:
             return self.form_invalid(form, form_file)
+
+    def check_limit(self):
+        count_votes = UserVoteModel.objects.filter(user_vote=self.request.user).count()
+        return count_votes > 5
 
     @override(check_signature=False)
     def form_invalid(self, form, form_file):

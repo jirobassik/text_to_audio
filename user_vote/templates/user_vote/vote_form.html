@@ -3,14 +3,18 @@
 {% block style %}{% static 'user_vote/css/vote_form.css' %}{% endblock %}
 {% block content_main %}
     <div class="text-converter-form">
-    <h1 class="add-voice-title">Добавление нового голоса</h1>
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
-            {{ form_file.non_form_errors }}
-            {{ form_file.management_form }}
-            {{ form_file.as_p }}
-            <p><input type="submit" value="Добавить голос"></p>
-        </form>
+        <h1 class="add-voice-title">Добавление нового голоса</h1>
+        {% if not limit %}
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                {{ form_file.non_form_errors }}
+                {{ form_file.management_form }}
+                {{ form_file.as_p }}
+                <p><input type="submit" value="Добавить голос"></p>
+            </form>
+            {% else %}
+            <h3>Превышен лимит голосов, пожалуйста удалите лишний</h3>
+        {% endif %}
     </div>
 {% endblock %}
