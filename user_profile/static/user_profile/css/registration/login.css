@@ -88,8 +88,18 @@
 .google-button {
     font-size: 35px;
     color: red;
+    text-decoration: none;
 }
 
 .google-button:hover {
     color: darkred;
+}
+
+.github-button {
+    font-size: 35px;
+    color: black;
+}
+
+.github-button:hover {
+    color: grey;
 }
