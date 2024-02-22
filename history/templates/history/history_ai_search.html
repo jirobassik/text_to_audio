@@ -17,6 +17,7 @@
                         <th>{% get_columns_name column %}</th>
                     {% endif %}
                 {% endfor %}
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -36,6 +37,7 @@
                             {% endif %}
                         {% endif %}
                     {% endfor %}
+                    <td><a href="{{ ai_entry.get_absolute_delete_url }}"><i class="bi bi-trash-fill"></i></a></td>
                 </tr>
             {% endfor %}
             </tbody>

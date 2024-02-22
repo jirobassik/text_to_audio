@@ -1,0 +1,12 @@
+{% extends 'layout_audio.html' %}
+{% load static %}
+{% block style %}{% static 'user_vote/css/user_vote_confirm_delete.css' %}{% endblock %}
+{% block content_main %}
+    <form method="post">
+        {% csrf_token %}
+        <h3>Подтверждение удаление истории</h3>
+        <p>Вы уверены, что хотите удалить это поле "{{ object }}"?</p>
+        {{ form }}
+        <input type="submit" value="Подтвердить">
+    </form>
+{% endblock %}

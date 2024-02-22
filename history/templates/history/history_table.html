@@ -5,6 +5,7 @@
         <th>Результат озвучивания (audio_file)</th>
         <th>Используемый голос (use_vote)</th>
         <th>Время добавления (time_add)</th>
+        <th></th>
     </tr>
     </thead>
     <tbody>
@@ -16,6 +17,7 @@
             </td>
             <td>{{ entry.content_object.audio_name }}</td>
             <td>{{ entry.time_add }}</td>
+            <td><a href="{{ entry.get_absolute_delete_url }}"><i class="bi bi-trash-fill"></i></a></td>
         </tr>
     {% endfor %}
     </tbody>

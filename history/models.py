@@ -27,6 +27,7 @@ class HistoryModel(models.Model):
     object_id = models.PositiveIntegerField(verbose_name='Принадлежит голосу')
     content_object = GenericForeignKey("content_type", "object_id")
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
+    is_deleted = models.BooleanField(verbose_name='Удалено', default=False)
 
     objects = HistoryUserManager()
 
@@ -38,6 +39,9 @@ class HistoryModel(models.Model):
 
     def get_absolute_url(self):
         return reverse('history-detail', args=[self.id])
+
+    def get_absolute_delete_url(self):
+        return reverse('history-delete', args=[self.id])
 
     def __str__(self):
         return self.text

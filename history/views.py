@@ -1,6 +1,8 @@
 import logging
 from django.contrib import messages
-from django.views.generic import ListView, DetailView
+from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, DeleteView
 from django.contrib.postgres.search import SearchVector
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.utils import ProgrammingError
@@ -20,7 +22,7 @@ class HistoryView(LoginRequiredMixin, ListView):
         return context
 
     def get_queryset(self):
-        return self.model.objects.history_user_access(self.request.user)
+        return self.model.objects.history_user_access(self.request.user).filter(is_deleted=False)
 
 
 class HistoryDetailView(LoginRequiredMixin, DetailView):
@@ -93,5 +95,18 @@ class HistorySearchView(LoginRequiredMixin, ListView):
         query = self.request.GET.get('input_query', '')
         self.request.session[f'user_standart_query:{self.request.user.id}'] = query
         filter_query = self.model.objects.history_user_access(self.request.user).annotate(
-            search=SearchVector('text', 'vote_mod__audio_name', 'user_vote_mod__audio_name')).filter(search=query)
+            search=SearchVector('text', 'vote_mod__audio_name', 'user_vote_mod__audio_name')).filter(search=query,
+                                                                                                     is_deleted=False)
         return filter_query
+
+
+class HistoryDeleteView(LoginRequiredMixin, DeleteView):
+    model = HistoryModel
+    success_url = reverse_lazy("history-view")
+    template_name = 'history/history_confirm_delete.html'
+
+    def form_valid(self, form):
+        success_url = self.get_success_url()
+        self.object.is_deleted = True
+        self.object.save()
+        return HttpResponseRedirect(success_url)

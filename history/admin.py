@@ -10,10 +10,10 @@ class HistoryModelInline(GenericTabularInline):
 
 @admin.register(HistoryModel)
 class AdminHistory(admin.ModelAdmin):
-    list_display = ['text', 'audio_file', 'time_add', 'user_history_link']
+    list_display = ['text', 'audio_file', 'time_add', 'user_history_link', 'is_deleted']
     list_filter = ['text', 'time_add', 'user']
     search_fields = ['text' 'user']
-    ordering = ['text', 'time_add']
+    ordering = ['text', 'time_add', 'is_deleted']
 
     def user_history_link(self, obj):
         url = reverse('admin:auth_user_change', args=[obj.user.id])

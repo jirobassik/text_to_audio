@@ -26,5 +26,5 @@ def get_columns(raw_query_set):
 
 @register.simple_tag
 def filter_user(his_ai_data, req_user):
-    return [his_el for his_el in his_ai_data if his_el.user_id == req_user]
+    return [his_el for his_el in his_ai_data if his_el.user_id == req_user and not his_el.is_deleted]
 
