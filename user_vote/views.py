@@ -21,7 +21,7 @@ class UserVoteView(LoginRequiredMixin, ListView):
     context_object_name = 'user_vote'
 
     def get_queryset(self):
-        return self.model.objects.access_user(self.request.user)
+        return self.model.objects.access_user(self.request.user).filter(is_deleted=False)
 
 
 class UserVoteDetailView(LoginRequiredMixin, DetailView):
@@ -30,7 +30,7 @@ class UserVoteDetailView(LoginRequiredMixin, DetailView):
     context_object_name = 'user_vote_detail'
 
     def get_object(self, queryset=None):
-        queryset = self.model.objects.filter(user_vote=self.request.user).prefetch_related(
+        queryset = self.model.objects.filter(user_vote=self.request.user, is_deleted=False).prefetch_related(
             'useraudiofile_set')
         return super().get_object(queryset)
 
@@ -42,7 +42,7 @@ class UserVoteTagView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         tag = get_object_or_404(Tag, slug=self.kwargs['tag'])
-        return self.model.objects.access_user(self.request.user).filter(tags__in=[tag])
+        return self.model.objects.access_user(self.request.user).filter(tags__in=[tag], is_deleted=False)
 
 
 class CreateVoteView(LoginRequiredMixin, CreateView):
@@ -110,7 +110,10 @@ class UserVoteDeleteView(LoginRequiredMixin, DeleteView):
         audio_name = self.object.audio_name
         try:
             del_voice(audio_name, add_delete_voice_request_user)
-            return super().form_valid(form)
+            success_url = self.get_success_url()
+            self.object.is_deleted = True
+            self.object.save()
+            return HttpResponseRedirect(success_url)
         except (SSLError, ConnectionError, SendError) as e:
             messages.error(self.request, 'Что-то пошло не так, попробуйте позже')
             logging.error(e)

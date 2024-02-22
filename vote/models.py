@@ -14,12 +14,13 @@ from utils.redis_connect import r
 class CommonVoteModel(models.Model):
     audio_name = models.CharField('Название голоса', max_length=20, null=False, blank=False, unique=True)
     tags = TaggableManager(verbose_name='Тэги', blank=False)
+    is_deleted = models.BooleanField(verbose_name='Удалено', default=False)
 
     class Meta:
         abstract = True
         ordering = ['audio_name']
         indexes = [
-            models.Index(fields=['audio_name'])
+            models.Index(fields=['audio_name', 'is_deleted'])
         ]
 
     def __str__(self):

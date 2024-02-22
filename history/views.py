@@ -31,7 +31,7 @@ class HistoryDetailView(LoginRequiredMixin, DetailView):
     template_name = 'history/history_detail.html'
 
     def get_object(self, queryset=None):
-        queryset = self.model.objects.history_user_access(self.request.user)
+        queryset = self.model.objects.history_user_access(self.request.user).filter(is_deleted=False)
         return super().get_object(queryset)
 
 
