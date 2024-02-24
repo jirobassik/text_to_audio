@@ -1,0 +1,27 @@
+@import url("text_to_audio.css");
+
+.text-converter-form input[type="file"]::-webkit-file-upload-button {
+    display: none;
+}
+
+
+.text-converter-form input[type="file"] {
+    width: 50%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: none;
+    background-color: grey;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    display: block;
+}
+
+#id_text {
+    width: 50%;
+    height: 50px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}

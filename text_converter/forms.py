@@ -1,5 +1,6 @@
 from django import forms
 from operator import getitem
+from utils.file_validation import extension_validation, content_validation, max_size_validation
 
 
 class TextConverterForm(forms.Form):
@@ -33,3 +34,13 @@ class TextConverterLoginForm(TextConverterForm):
                                                      for vote in self.user_votes]))
         choices = [choice for choice in voice_choice if getitem(choice, 1)]
         return choices
+
+
+class TextConverterFormAudioUpload(TextConverterLoginForm):
+    text = forms.FileField(label='Загрузка аудио файла',
+                           help_text='Файл формата .wav, размера не более 2 мб',
+                           validators=(extension_validation, content_validation,
+                                       max_size_validation))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)

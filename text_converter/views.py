@@ -1,6 +1,7 @@
 import logging
 
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
@@ -8,7 +9,8 @@ from django.views import View
 from django.views.generic.edit import FormView
 from requests.exceptions import SSLError, ConnectionError
 
-from text_converter.forms import TextConverterLoginForm, TextConverterForm
+
+from text_converter.forms import TextConverterLoginForm, TextConverterForm, TextConverterFormAudioUpload
 from text_to_audio_manager.models import TaskAudioManagerModel
 from utils.redis_connect import r
 from utils.server_converter.send import send_converter_anonym
@@ -27,7 +29,7 @@ class TextConverterView(View):
             return TextConverterFormView.as_view()(request, *args, **kwargs)
 
 
-class TextConverterLoginFormView(FormView):
+class TextConverterLoginFormView(LoginRequiredMixin, FormView):
     form_class = TextConverterLoginForm
     template_name = 'text_converter/text_to_audio.html'
     success_url = reverse_lazy('text-to-audio')
@@ -37,7 +39,7 @@ class TextConverterLoginFormView(FormView):
         queryset_rel_file_vote_model = VoteModel.objects.annotate(num_related=Count('audiofilemodel')).filter(
             num_related__gt=0)
         queryset_rel_file_user_vote_model = UserVoteModel.objects.access_user(self.request.user).annotate(
-            num_related=Count('useraudiofile')).filter(num_related__gt=0)
+            num_related=Count('useraudiofile')).filter(num_related__gt=0, is_deleted=False)
         kwargs['votes'] = queryset_rel_file_vote_model.values('id', 'audio_name')
         kwargs['user_votes'] = queryset_rel_file_user_vote_model.values('id', 'audio_name')
         return kwargs
@@ -69,12 +71,20 @@ class TextConverterLoginFormView(FormView):
         return HttpResponseRedirect(self.get_success_url())
 
     def start_convert(self, text, voice_id, preset, optgroup_name):
-        user = self.request.user
-        task_model = TaskAudioManagerModel.objects.create(task_id='Не задан', text=text,
-                                                          status='В очереди', rel_user=user)
+        user, task_model = self.create_manager_field(text=text)
+        self.add_to_queue(task_model, text, voice_id, preset, optgroup_name, user)
+
+    @staticmethod
+    def add_to_queue(task_model, text, voice_id, preset, optgroup_name, user):
         task_pk = task_model.pk
         task_id = add_response_api_converter(text, voice_id, preset, optgroup_name, task_pk, user).task.id
         r.sadd(f'executing-tasks:user:{user}', task_id)
+
+    def create_manager_field(self, task_id='Не задан', text='Обрабатывается', status='В очереди'):
+        user = self.request.user
+        task_model = TaskAudioManagerModel.objects.create(task_id=task_id, text=text,
+                                                          status=status, rel_user=user)
+        return user, task_model
 
 
 class TextConverterFormView(FormView):
@@ -102,3 +112,13 @@ class TextConverterFormView(FormView):
             messages.error(self.request, 'Что-то пошло не так, попробуйте позже')
             logging.error(e)
         return HttpResponseRedirect(self.get_success_url())
+
+
+class TextConverterLoginAudioView(TextConverterLoginFormView):
+    form_class = TextConverterFormAudioUpload
+    template_name = 'text_converter/text_to_audio_audio_upload.html'
+    success_url = reverse_lazy('audio-input')
+
+    def start_convert(self, text, voice_id, preset, optgroup_name):
+        user, task_model = self.create_manager_field()
+        self.add_to_queue(task_model, text, voice_id, preset, optgroup_name, user)

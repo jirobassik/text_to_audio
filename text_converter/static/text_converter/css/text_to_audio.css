@@ -57,3 +57,14 @@ button:hover {
     padding: 20px;
     border-radius: 5px;
 }
+
+.audio-link {
+    color: grey;
+    text-decoration: none;
+}
+
+.audio-link:hover {
+    text-decoration: none;
+    color: black;
+}
+
