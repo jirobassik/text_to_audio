@@ -62,6 +62,7 @@ class CreateVoteView(LoginRequiredMixin, CreateView):
         return context
 
     def post(self, request, *args, **kwargs):
+        self.object = None
         form = self.get_form()
         form_file = UserVoteInlineFormat(data=self.request.POST, files=self.request.FILES)
         if form.is_valid() and form_file.is_valid():
